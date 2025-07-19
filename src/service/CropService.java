@@ -2,28 +2,23 @@ package service;
 
 import dao.CropDAO;
 import model.Crop;
-import util.DBConnection;
 
-import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CropService {
     private CropDAO cropDAO;
 
     public CropService() {
-        try {
-            Connection conn = DBConnection.getConnection();
-            this.cropDAO = new CropDAO(conn);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.cropDAO = new CropDAO();
     }
 
     /**
      * Get all crops owned by a player.
      */
     public List<Crop> getCropsByPlayerID(int playerID) {
-        return cropDAO.getCropsByPlayer(playerID);
+        List<Crop> crops = cropDAO.getCropsByPlayer(playerID);
+        return crops != null ? crops : new ArrayList<>();
     }
 
     /**
@@ -58,13 +53,15 @@ public class CropService {
      * Get all crops that are ready to harvest for a player.
      */
     public List<Crop> getReadyToHarvestCrops(int playerID) {
-        return cropDAO.getReadyToHarvest(playerID);
+        List<Crop> ready = cropDAO.getReadyToHarvest(playerID);
+        return ready != null ? ready : new ArrayList<>();
     }
 
     /**
      * Get crops by produce item ID (e.g., what crop produces this item).
      */
     public List<Crop> getCropsByProduceID(int produceID) {
-        return cropDAO.getCropsByProduceID(produceID);
+        List<Crop> byProduce = cropDAO.getCropsByProduceID(produceID);
+        return byProduce != null ? byProduce : new ArrayList<>();
     }
 }
