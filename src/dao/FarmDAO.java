@@ -1,73 +1,58 @@
 package dao;
 
 import model.Farm;
+import util.DBConnection;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FarmDAO {
 
-    private Connection conn;
-
-    public FarmDAO(Connection conn) {
-        this.conn = conn;
-    }
-
-    /**
-     * Inserts a new farm into the database.
-     * @param farm The farm to insert, which must have valid playerID, cropID, and animalID fields.
-     * @return true if the insertion was successful, false otherwise
-     * @throws SQLException If there is a problem with the database
-     */
-    public boolean insertFarm(Farm farm) throws SQLException {
+    public boolean insertFarm(Farm farm) {
         String sql = "INSERT INTO farm (playerID, cropID, animalID) VALUES (?, ?, ?)";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, farm.getPlayerID());
             stmt.setInt(2, farm.getCropID());
             stmt.setInt(3, farm.getAnimalID());
             return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Insert Farm Error: " + e.getMessage());
+            return false;
         }
     }
 
-    /**
-     * Updates an existing farm in the database.
-     * @param farm The farm to update, which must have valid playerID, cropID, and animalID fields.
-     * @return true if the update was successful, false otherwise
-     * @throws SQLException If there is a problem with the database
-     */
-    public boolean updateFarm(Farm farm) throws SQLException {
+    public boolean updateFarm(Farm farm) {
         String sql = "UPDATE farm SET cropID = ?, animalID = ? WHERE playerID = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, farm.getCropID());
             stmt.setInt(2, farm.getAnimalID());
             stmt.setInt(3, farm.getPlayerID());
             return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Update Farm Error: " + e.getMessage());
+            return false;
         }
     }
 
-    /**
-     * Deletes a farm from the database by player ID.
-     * @param playerID The ID of the player whose farm to delete
-     * @return true if the deletion was successful, false otherwise
-     * @throws SQLException If there is a problem with the database
-     */
-    public boolean deleteFarm(int playerID) throws SQLException {
+    public boolean deleteFarm(int playerID) {
         String sql = "DELETE FROM farm WHERE playerID = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, playerID);
             return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Delete Farm Error: " + e.getMessage());
+            return false;
         }
     }
 
-    /**
-     * Retrieves a farm from the database by player ID.
-     * @param playerID The ID of the player whose farm to retrieve
-     * @return The Farm object if found, null otherwise
-     * @throws SQLException If there is a problem with the database
-     */
-    public Farm getFarmByPlayerID(int playerID) throws SQLException {
+    public Farm getFarmByPlayerID(int playerID) {
         String sql = "SELECT * FROM farm WHERE playerID = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, playerID);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -77,19 +62,17 @@ public class FarmDAO {
                 farm.setAnimalID(rs.getInt("animalID"));
                 return farm;
             }
+        } catch (SQLException e) {
+            System.err.println("Get Farm Error: " + e.getMessage());
         }
         return null;
     }
 
-    /**
-     * Retrieves all farms from the database.
-     * @return A list of Farm objects, possibly empty if no farms are found.
-     * @throws SQLException If there is a problem with the database.
-     */
-    public List<Farm> getAllFarms() throws SQLException {
+    public List<Farm> getAllFarms() {
         List<Farm> farms = new ArrayList<>();
         String sql = "SELECT * FROM farm";
-        try (PreparedStatement stmt = conn.prepareStatement(sql);
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 Farm farm = new Farm();
@@ -98,6 +81,8 @@ public class FarmDAO {
                 farm.setAnimalID(rs.getInt("animalID"));
                 farms.add(farm);
             }
+        } catch (SQLException e) {
+            System.err.println("Get All Farms Error: " + e.getMessage());
         }
         return farms;
     }
