@@ -65,6 +65,25 @@ public class NPCDAO {
         }
         return null;
     }
+    
+    public NPC getNPCByName(String npcname) {
+        String sql = "SELECT * FROM npcs WHERE npcname = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, npcname);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new NPC(
+                    rs.getInt("npcID"),
+                    rs.getString("npcname"),
+                    rs.getBoolean("givinggifttoday")
+                );
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving NPC by name: " + e.getMessage());
+        }
+        return null;
+    }
 
     public List<NPC> getAllNPCs() {
         List<NPC> npcs = new ArrayList<>();

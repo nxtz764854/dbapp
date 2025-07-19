@@ -16,6 +16,10 @@ public class PlayerService {
         return playerDAO.createPlayer(player);
     }
 
+    public boolean updatePlayer(Player player) {
+        return playerDAO.updatePlayer(player);
+    }
+
     public Player getPlayerByID(int playerID) {
         return playerDAO.getPlayerByID(playerID);
     }

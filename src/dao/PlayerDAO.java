@@ -179,6 +179,32 @@ public class PlayerDAO {
         player.setCurrent_year(rs.getInt("current_year"));
         return player;
     }
+
+    /**
+     * Updates all fields of a player in the database.
+     * @param player The player object with updated values
+     * @return true if the update was successful, false otherwise
+     */
+    public boolean updatePlayer(Player player) {
+        String sql = "UPDATE players SET playername = ?, wallet = ?, current_day = ?, current_season = ?, current_year = ? WHERE playerID = ?";
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, player.getPlayername());
+            stmt.setInt(2, player.getWallet());
+            stmt.setInt(3, player.getCurrent_day());
+            stmt.setString(4, player.getCurrent_season());
+            stmt.setInt(5, player.getCurrent_year());
+            stmt.setInt(6, player.getPlayerID());
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     /**
      * Updates the current date of a player in the database.
      * @param playerID The ID of the player to update

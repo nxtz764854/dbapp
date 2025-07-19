@@ -25,6 +25,15 @@ public class RelationService {
         return relationDAO.updateHearts(playerID, npcID, newHeartValue);
     }
 
+    public void incrementHearts(int playerID, int npcID) {
+        Relation relation = relationDAO.getRelation(playerID, npcID);
+        if (relation != null) {
+            int hearts = relation.getNpchearts() + 1;
+            relationDAO.updateHearts(playerID, npcID, hearts);
+        }
+    }
+
+
     public Relation getRelation(int playerID, int npcID) {
         return relationDAO.getRelation(playerID, npcID);
     }

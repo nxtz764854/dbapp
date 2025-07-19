@@ -33,6 +33,10 @@ public class NPCService {
         return npcDAO.getNPCByID(npcID);
     }
 
+    public NPC getNPCByName(String name) {
+        return npcDAO.getNPCByName(name);
+    }
+
     public List<NPC> getAllNPCs() {
         List<NPC> npcs = npcDAO.getAllNPCs();
         return npcs != null ? npcs : new ArrayList<>();

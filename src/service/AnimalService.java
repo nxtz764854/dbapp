@@ -36,6 +36,29 @@ public class AnimalService {
         return animalDAO.getReadyToHarvestAnimals(playerID);
     }
 
+    public void markHarvested(int animalID) {
+        Animal animal = animalDAO.getAnimalByID(animalID);
+        if (animal != null) {
+            animal.setReadytoharvest(false);
+            animalDAO.updateAnimal(animal);
+        }
+    }
+
+    public void resetReadyToHarvest(int playerID) {
+        List<Animal> animals = animalDAO.getAnimalsByPlayerID(playerID);
+        for (Animal animal : animals) {
+            int days = animal.getProducedays();
+            if (days <= 1) {
+                animal.setReadytoharvest(true);
+                animal.setProducedays(0);
+            } else {
+                animal.setProducedays(days - 1);
+            }
+            animalDAO.updateAnimal(animal);
+        }
+    }
+
+
     public List<Animal> getAnimalsByProduceID(int produceID) {
         return animalDAO.getAnimalsByProduceID(produceID);
     }

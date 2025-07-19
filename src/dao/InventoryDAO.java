@@ -74,12 +74,31 @@ public class InventoryDAO {
      * @param itemID The ID of the item to remove
      * @return true if the removal was successful, false otherwise
      */
-    public boolean removeItemFromInventory(int playerID, int itemID) {
-        String sql = "DELETE FROM inventory WHERE playerID = ? AND itemID = ?";
+    public boolean removeItemFromInventory(int playerID, int itemID, int quantity) {
+        String check = "SELECT quantity FROM inventory WHERE playerID = ? AND itemID = ?";
+        String delete = "DELETE FROM inventory WHERE playerID = ? AND itemID = ?";
+        String update = "UPDATE inventory SET quantity = quantity - ? WHERE playerID = ? AND itemID = ?";
 
-        try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement(check);
             stmt.setInt(1, playerID);
             stmt.setInt(2, itemID);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int currentQuantity = rs.getInt("quantity");
+                if (currentQuantity <= quantity) {
+                    stmt = conn.prepareStatement(delete);
+                    stmt.setInt(1, playerID);
+                    stmt.setInt(2, itemID);
+                } else {
+                    stmt = conn.prepareStatement(update);
+                    stmt.setInt(1, quantity);
+                    stmt.setInt(2, playerID);
+                    stmt.setInt(3, itemID);
+                }
+            }
+
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();

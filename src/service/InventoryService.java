@@ -20,7 +20,7 @@ public class InventoryService {
         return inventoryDAO.addItemToInventory(playerID, itemID, quantity);
     }
 
-    public boolean removeItemFromInventory(int playerID, int itemID) {
-        return inventoryDAO.removeItemFromInventory(playerID, itemID);
+    public boolean removeItemFromInventory(int playerID, int itemID, int quantity) {
+        return inventoryDAO.removeItemFromInventory(playerID, itemID, quantity);
     }
 }

@@ -35,6 +35,10 @@ public class CropService {
         return cropDAO.updateCrop(crop);
     }
 
+    public void markHarvested(int cropID) {
+        cropDAO.deleteCrop(cropID); // Remove harvested crop from the farm
+    }
+
     /**
      * Remove a crop from the farm.
      */
@@ -47,6 +51,21 @@ public class CropService {
      */
     public Crop getCropByID(int cropID) {
         return cropDAO.getCropByID(cropID);
+    }
+
+    public void advanceGrowthForPlayer(int playerID) {
+        List<Crop> crops = cropDAO.getCropsByPlayer(playerID);
+        for (Crop crop : crops) {
+            int days = crop.getGrowth_time();
+            if (days > 1) {
+                crop.setGrowth_time(days - 1);
+                cropDAO.updateCrop(crop);
+            } else if (days == 1) {
+                crop.setGrowth_time(0);
+                crop.setReadytoharvest(true);
+                cropDAO.updateCrop(crop);
+            }
+        }
     }
 
     /**
