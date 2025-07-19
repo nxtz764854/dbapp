@@ -42,6 +42,7 @@ public class Main {
                 ResultSet keys = insertStmt.getGeneratedKeys();
                 if (keys.next()) {
                     playerId = keys.getInt(1);
+                    createFarm(conn, playerId);
                     System.out.println("New player created!");
                     System.out.println("Your Player ID: " + playerId + ", Username: " + inputName + ", Wallet: 150");
                     System.out.println("Current Date: Day 1 of Spring, Year 1");
@@ -293,7 +294,7 @@ public class Main {
                 String itemIdString = scanner.nextLine().trim();
                 try {
                     int itemID = Integer.parseInt(itemIdString);
-                    placeanimal(conn, playerId, itemID);
+                    placeAnimal(conn, playerId, itemID);
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid ItemID.");
                 }
@@ -322,38 +323,80 @@ public class Main {
 }
 
 
-    public static void plantSeed(Connection conn, int playerId, int itemID) {
+public static void createFarm(Connection conn, int playerId) {
     try {
-        // Check if player has the seed
+        // Check if the player already has a farm
+        String checkQuery = "SELECT playerID FROM farms WHERE playerID = ?";
+        PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
+        checkStmt.setInt(1, playerId);
+        ResultSet rs = checkStmt.executeQuery();
+
+        if (rs.next()) {
+            System.out.println("Farm already exists for player ID: " + playerId);
+            return;
+        }
+
+        // Insert new farm row
+        String insertFarm = "INSERT INTO farms (playerID, cropID, animalID) VALUES (?, NULL, NULL)";
+        PreparedStatement stmt = conn.prepareStatement(insertFarm);
+        stmt.setInt(1, playerId);
+        stmt.executeUpdate();
+
+        System.out.println("Farm created for player ID: " + playerId);
+    } catch (SQLException e) {
+        System.out.println("Error creating farm: " + e.getMessage());
+    }
+}
+
+public static void plantSeed(Connection conn, int playerId, int itemID) {
+    try {
         String checkQuery = "SELECT inv.quantity, i.itemname, i.specialvalue FROM inventories inv JOIN items i ON inv.itemID = i.itemID WHERE inv.playerID = ? AND inv.itemID = ? AND i.itemtype = 'crop'";
         PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
         checkStmt.setInt(1, playerId);
         checkStmt.setInt(2, itemID);
         ResultSet rs = checkStmt.executeQuery();
+
         if (rs.next() && rs.getInt("quantity") > 0) {
-            int growthDays = rs.getInt("specialvalue"); // Use 'value' as growth days
+            int growthDays = rs.getInt("specialvalue");
             String cropName = rs.getString("itemname");
-            // Insert into crop table
+
+            int produceId = getProduceId(itemID);
+            if (produceId == -1) {
+                System.out.println("No grown product mapping for this seed.");
+                return;
+            }
+
+            // Insert crop
             String insertCrop = "INSERT INTO crops (playerID, itemID, cropname, growth_time, produceID, readytoharvest) VALUES (?, ?, ?, ?, ?, FALSE)";
-            PreparedStatement insertStmt = conn.prepareStatement(insertCrop);
+            PreparedStatement insertStmt = conn.prepareStatement(insertCrop, Statement.RETURN_GENERATED_KEYS);
             insertStmt.setInt(1, playerId);
             insertStmt.setInt(2, itemID);
             insertStmt.setString(3, cropName);
             insertStmt.setInt(4, growthDays);
-            int ProduceId = getProduceId(itemID);
-            if (ProduceId == -1) {
-                System.out.println("No grown product mapping for this seed.");
-                return;
-            }
-            insertStmt.setInt(5, ProduceId);
+            insertStmt.setInt(5, produceId);
             insertStmt.executeUpdate();
-            // Decrease seed quantity
+
+            // Get cropID
+            ResultSet keys = insertStmt.getGeneratedKeys();
+            if (keys.next()) {
+                int cropId = keys.getInt(1);
+
+                // Update player's farm
+                String updateFarm = "UPDATE farms SET cropID = ? WHERE playerID = ?";
+                PreparedStatement updateFarmStmt = conn.prepareStatement(updateFarm);
+                updateFarmStmt.setInt(1, cropId);
+                updateFarmStmt.setInt(2, playerId);
+                updateFarmStmt.executeUpdate();
+            }
+
+            // Reduce seed count
             String updateInv = "UPDATE inventories SET quantity = quantity - 1 WHERE playerID = ? AND itemID = ?";
             PreparedStatement updateStmt = conn.prepareStatement(updateInv);
             updateStmt.setInt(1, playerId);
             updateStmt.setInt(2, itemID);
             updateStmt.executeUpdate();
-            System.out.println("Planted " + cropName + "!");
+
+            System.out.println("Planted " + cropName + " in your farm!");
         } else {
             System.out.println("You don't have that seed.");
         }
@@ -362,40 +405,55 @@ public class Main {
     }
 }
 
-
-public static void placeanimal(Connection conn, int playerId, int itemID) {
+public static void placeAnimal(Connection conn, int playerId, int itemID) {
     try {
-        // Check if player has the animal
         String checkQuery = "SELECT inv.quantity, i.itemname, i.specialvalue FROM inventories inv JOIN items i ON inv.itemID = i.itemID WHERE inv.playerID = ? AND inv.itemID = ? AND i.itemtype = 'animal'";
         PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
         checkStmt.setInt(1, playerId);
         checkStmt.setInt(2, itemID);
         ResultSet rs = checkStmt.executeQuery();
+
         if (rs.next() && rs.getInt("quantity") > 0) {
-            int producedays = rs.getInt("specialvalue"); // Use 'value' as growth days
-            String animalname = rs.getString("itemname");
-            // Insert into animal table
-            String insertAnimal = "INSERT INTO animals (playerID, itemID, animalname, age, producedays, produceID, readytoharvest) VALUES (?, ?, ?, ?, ?, ?, FALSE)";
-            PreparedStatement insertStmt = conn.prepareStatement(insertAnimal);
-            insertStmt.setInt(1, playerId);
-            insertStmt.setInt(2, itemID);
-            insertStmt.setString(3, animalname);
-            insertStmt.setInt(4, 0);
-            insertStmt.setInt(5, producedays);
-            int ProduceId = getProduceId(itemID);
-            if (ProduceId == -1) {
-                System.out.println("No grown product mapping for this seed.");
+            int produceDays = rs.getInt("specialvalue");
+            String animalName = rs.getString("itemname");
+
+            int produceId = getProduceId(itemID);
+            if (produceId == -1) {
+                System.out.println("No grown product mapping for this animal.");
                 return;
             }
-            insertStmt.setInt(6, ProduceId);
+
+            // Insert animal
+            String insertAnimal = "INSERT INTO animals (playerID, itemID, animalname, age, producedays, produceID, readytoharvest) VALUES (?, ?, ?, ?, ?, ?, FALSE)";
+            PreparedStatement insertStmt = conn.prepareStatement(insertAnimal, Statement.RETURN_GENERATED_KEYS);
+            insertStmt.setInt(1, playerId);
+            insertStmt.setInt(2, itemID);
+            insertStmt.setString(3, animalName);
+            insertStmt.setInt(4, 0);
+            insertStmt.setInt(5, produceDays);
+            insertStmt.setInt(6, produceId);
             insertStmt.executeUpdate();
-            // Decrease animal quantity
+
+            ResultSet keys = insertStmt.getGeneratedKeys();
+            if (keys.next()) {
+                int animalId = keys.getInt(1);
+
+                // Update player's farm
+                String updateFarm = "UPDATE farms SET animalID = ? WHERE playerID = ?";
+                PreparedStatement updateFarmStmt = conn.prepareStatement(updateFarm);
+                updateFarmStmt.setInt(1, animalId);
+                updateFarmStmt.setInt(2, playerId);
+                updateFarmStmt.executeUpdate();
+            }
+
+            // Reduce quantity
             String updateInv = "UPDATE inventories SET quantity = quantity - 1 WHERE playerID = ? AND itemID = ?";
             PreparedStatement updateStmt = conn.prepareStatement(updateInv);
             updateStmt.setInt(1, playerId);
             updateStmt.setInt(2, itemID);
             updateStmt.executeUpdate();
-            System.out.println("Placed " + animalname + "!");
+
+            System.out.println("Placed " + animalName + " in your farm!");
         } else {
             System.out.println("You don't have that animal.");
         }
