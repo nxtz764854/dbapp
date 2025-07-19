@@ -4,7 +4,7 @@ CREATE DATABASE IF NOT EXISTS farming_game;
 USE farming_game;
 
 -- PLAYER TABLE
-CREATE TABLE IF NOT EXISTS players (
+CREATE TABLE IF NOT EXISTS player (
     playerID INT AUTO_INCREMENT PRIMARY KEY,
     playername VARCHAR(50) UNIQUE NOT NULL,
     wallet INT DEFAULT 150,
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS items (
     itemname VARCHAR(50) NOT NULL,
     itemtype ENUM('crop', 'animal', 'tool', 'gift', 'product') NOT NULL,
     specialvalue INT DEFAULT 0,
-    `desc` VARCHAR(255),
+    descript VARCHAR(255),
     quantity INT DEFAULT 0
 );
 
@@ -34,12 +34,13 @@ CREATE TABLE IF NOT EXISTS inventory (
 );
 
 -- CROP TABLE
-CREATE TABLE IF NOT EXISTS crops (
+CREATE TABLE IF NOT EXISTS crop (
     cropID INT PRIMARY KEY AUTO_INCREMENT,
     playerID INT,
     itemID INT,
     cropname VARCHAR(50),
     growth_time INT,
+    produceID INT,
     readytoharvest BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (playerID) REFERENCES player(playerID) ON DELETE CASCADE,
     FOREIGN KEY (itemID) REFERENCES items(itemID)
@@ -53,6 +54,7 @@ CREATE TABLE IF NOT EXISTS animals (
     animalname VARCHAR(50),
     age INT,
     producedays INT,
+    produceID INT,
     readytoharvest BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (playerID) REFERENCES player(playerID) ON DELETE CASCADE,
     FOREIGN KEY (itemID) REFERENCES items(itemID)
@@ -83,7 +85,7 @@ CREATE TABLE IF NOT EXISTS relations (
     FOREIGN KEY (npcname) REFERENCES npcs(npcname)
 );
 
-INSERT INTO items (itemID, itemname, itemtype,  specialvalue, `desc`, quantity)
+INSERT INTO items (itemID, itemname, itemtype,  specialvalue, descript, quantity)
 VALUES
 (1, 'Turnip Seed', 'crop', 1, 'A fast-growing root vegetable. Grows in 1 day.', 9999),
 (2, 'Carrot Seed', 'crop', 2, 'A crunchy orange vegetable. Grows in 2 days.', 9999),
