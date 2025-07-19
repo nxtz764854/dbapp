@@ -490,6 +490,28 @@ public static void placeAnimal(Connection conn, int playerId, int itemID) {
             upsertStmt.setInt(1, playerId);
             upsertStmt.setInt(2, ProduceId);
             upsertStmt.executeUpdate();
+
+            String timeQuery = "SELECT current_season, current_day, current_year FROM players WHERE playerID = ?";
+PreparedStatement timeStmt = conn.prepareStatement(timeQuery);
+timeStmt.setInt(1, playerId);
+ResultSet timeRs = timeStmt.executeQuery();
+
+if (timeRs.next()) {
+    String season = timeRs.getString("current_season");
+    int day = timeRs.getInt("current_day");
+    int year = timeRs.getInt("current_year");
+
+    // Insert log
+    String logQuery = "INSERT INTO logs (playerID, action, season, day, year) VALUES (?, ?, ?, ?, ?)";
+    PreparedStatement logStmt = conn.prepareStatement(logQuery);
+    logStmt.setInt(1, playerId);
+    logStmt.setString(2, "Harvested crop ID: " + cropID);
+    logStmt.setString(3, season);
+    logStmt.setInt(4, day);
+    logStmt.setInt(5, year);
+    logStmt.executeUpdate();
+            }
+
             System.out.println("Harvested successfully!");
         } else {
             System.out.println("That crops is not ready to harvest.");
@@ -530,6 +552,21 @@ public static void tendAnimal(Connection conn, int playerId, int animalID) {
             updateStmt.setInt(1, playerId);
             updateStmt.executeUpdate();
            
+
+            String[] gameTime = getCurrentGameTime(conn, playerId);
+            String season = gameTime[0];
+            int day = Integer.parseInt(gameTime[1]);
+            int year = Integer.parseInt(gameTime[2]);
+
+            // Insert log entry
+            String logQuery = "INSERT INTO logs (playerID, action, season, day, year) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement logStmt = conn.prepareStatement(logQuery);
+            logStmt.setInt(1, playerId);
+            logStmt.setString(2, "Tended animal ID: " + animalID);
+            logStmt.setString(3, season);
+            logStmt.setInt(4, day);
+            logStmt.setInt(5, year);
+            logStmt.executeUpdate();
 
             System.out.println("Tended successfully!");
         } else {
@@ -858,6 +895,20 @@ public static void updateAnimalGrowth(Connection conn, int playerId) {
                 System.out.println("Invalid choice.");
         }
     }
+}
+
+public static String[] getCurrentGameTime(Connection conn, int playerId) throws SQLException {
+    String[] result = new String[3];
+    String query = "SELECT current_season, current_day, current_year FROM players WHERE playerID = ?";
+    PreparedStatement stmt = conn.prepareStatement(query);
+    stmt.setInt(1, playerId);
+    ResultSet rs = stmt.executeQuery();
+    if (rs.next()) {
+        result[0] = rs.getString("current_season"); // season
+        result[1] = String.valueOf(rs.getInt("current_day")); // day
+        result[2] = String.valueOf(rs.getInt("current_year")); // year
+    }
+    return result;
 }
 
 public static int getProduceId(int seedItemId) {
