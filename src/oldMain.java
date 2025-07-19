@@ -921,7 +921,7 @@ public static void displayAllLogs(Connection conn) {
     try (PreparedStatement stmt = conn.prepareStatement(query);
          ResultSet rs = stmt.executeQuery()) {
 
-        System.out.println("======= PRODUCE REPORT =======");
+        System.out.println("======= PRODUCE ACTIONS REPORT =======");
         while (rs.next()) {
             int logID = rs.getInt("logID");
             int playerID = rs.getInt("playerID");
