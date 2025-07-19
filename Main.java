@@ -334,12 +334,18 @@ public class Main {
             int growthDays = rs.getInt("specialvalue"); // Use 'value' as growth days
             String cropName = rs.getString("itemname");
             // Insert into crop table
-            String insertCrop = "INSERT INTO crop (playerID, itemID, cropname, growth_time, readytoharvest) VALUES (?, ?, ?, ?, FALSE)";
+            String insertCrop = "INSERT INTO crop (playerID, itemID, cropname, growth_time, produceID, readytoharvest) VALUES (?, ?, ?, ?, ?, FALSE)";
             PreparedStatement insertStmt = conn.prepareStatement(insertCrop);
             insertStmt.setInt(1, playerId);
             insertStmt.setInt(2, itemID);
             insertStmt.setString(3, cropName);
             insertStmt.setInt(4, growthDays);
+            int ProduceId = getProduceId(itemID);
+            if (ProduceId == -1) {
+                System.out.println("No grown product mapping for this seed.");
+                return;
+            }
+            insertStmt.setInt(5, ProduceId);
             insertStmt.executeUpdate();
             // Decrease seed quantity
             String updateInv = "UPDATE inventory SET quantity = quantity - 1 WHERE playerID = ? AND itemID = ?";
@@ -369,13 +375,19 @@ public static void placeanimal(Connection conn, int playerId, int itemID) {
             int producedays = rs.getInt("specialvalue"); // Use 'value' as growth days
             String animalname = rs.getString("itemname");
             // Insert into animal table
-            String insertAnimal = "INSERT INTO animals (playerID, itemID, animalname, age, producedays, readytoharvest) VALUES (?, ?, ?, ?, ?, FALSE)";
+            String insertAnimal = "INSERT INTO animals (playerID, itemID, animalname, age, producedays, produceID, readytoharvest) VALUES (?, ?, ?, ?, ?, ?, FALSE)";
             PreparedStatement insertStmt = conn.prepareStatement(insertAnimal);
             insertStmt.setInt(1, playerId);
             insertStmt.setInt(2, itemID);
             insertStmt.setString(3, animalname);
             insertStmt.setInt(4, 0);
             insertStmt.setInt(5, producedays);
+            int ProduceId = getProduceId(itemID);
+            if (ProduceId == -1) {
+                System.out.println("No grown product mapping for this seed.");
+                return;
+            }
+            insertStmt.setInt(6, ProduceId);
             insertStmt.executeUpdate();
             // Decrease animal quantity
             String updateInv = "UPDATE inventory SET quantity = quantity - 1 WHERE playerID = ? AND itemID = ?";
@@ -409,8 +421,8 @@ public static void placeanimal(Connection conn, int playerId, int itemID) {
             deleteStmt.setInt(1, cropID);
             deleteStmt.executeUpdate();
             // Add to inventory (or update quantity)
-            int grownProductId = getGrownProductId(itemID);
-            if (grownProductId == -1) {
+            int ProduceId = getProduceId(itemID);
+            if (ProduceId == -1) {
                 System.out.println("No grown product mapping for this seed.");
                 return;
             }
@@ -418,7 +430,7 @@ public static void placeanimal(Connection conn, int playerId, int itemID) {
             String upsertInv = "INSERT INTO inventory (playerID, itemID, quantity) VALUES (?, ?, 1) ON DUPLICATE KEY UPDATE quantity = quantity + 1";
             PreparedStatement upsertStmt = conn.prepareStatement(upsertInv);
             upsertStmt.setInt(1, playerId);
-            upsertStmt.setInt(2, grownProductId);
+            upsertStmt.setInt(2, ProduceId);
             upsertStmt.executeUpdate();
             System.out.println("Harvested successfully!");
         } else {
@@ -443,8 +455,8 @@ public static void tendAnimal(Connection conn, int playerId, int animalID) {
 
 
             // Add to inventory (or update quantity)
-            int grownProductId = getGrownProductId(itemID);
-            if (grownProductId == -1) {
+            int ProduceId = getProduceId(itemID);
+            if (ProduceId == -1) {
                 System.out.println("No grown product mapping for this seed.");
                 return;
             }
@@ -452,7 +464,7 @@ public static void tendAnimal(Connection conn, int playerId, int animalID) {
             String upsertInv = "INSERT INTO inventory (playerID, itemID, quantity) VALUES (?, ?, 1) ON DUPLICATE KEY UPDATE quantity = quantity + 1";
             PreparedStatement upsertStmt = conn.prepareStatement(upsertInv);
             upsertStmt.setInt(1, playerId);
-            upsertStmt.setInt(2, grownProductId);
+            upsertStmt.setInt(2, ProduceId);
             upsertStmt.executeUpdate();
 
             String resetproduce = "UPDATE animals set readytoharvest = FALSE WHERE playerID = ?";
@@ -520,13 +532,13 @@ public static void updateAnimalGrowth(Connection conn, int playerId) {
             case "1":
                 // --- BUY SEEDS ---
                 try {
-                    String query = "SELECT itemID, itemname, `desc` FROM items WHERE itemtype = 'crop' ORDER BY itemID LIMIT 5";
+                    String query = "SELECT itemID, itemname, descript FROM items WHERE itemtype = 'crop' ORDER BY itemID LIMIT 5";
                     PreparedStatement stmt = conn.prepareStatement(query);
                     ResultSet rs = stmt.executeQuery();
 
                     int[] itemIDs = new int[5];
                     String[] names = new String[5];
-                    String[] descs = new String[5];
+                    String[] descripts = new String[5];
                     int[] prices = {20, 40, 50, 60, 150}; // Prices in order
                     int count = 0;
 
@@ -534,10 +546,10 @@ public static void updateAnimalGrowth(Connection conn, int playerId) {
                     while (rs.next() && count < 5) {
                         itemIDs[count] = rs.getInt("itemID");
                         names[count] = rs.getString("itemname");
-                        descs[count] = rs.getString("desc");
+                        descripts[count] = rs.getString("descript");
                         System.out.println("[" + (count + 1) + "] " +
                             names[count] +
-                            " - " + descs[count] +
+                            " - " + descripts[count] +
                             " (Price: " + prices[count] + ")");
                         count++;
                     }
@@ -610,13 +622,13 @@ public static void updateAnimalGrowth(Connection conn, int playerId) {
 
             case "2":
             try {
-                    String query = "SELECT itemID, itemname, `desc` FROM items WHERE itemtype = 'animal' ORDER BY itemID LIMIT 5";
+                    String query = "SELECT itemID, itemname, descript FROM items WHERE itemtype = 'animal' ORDER BY itemID LIMIT 5";
                     PreparedStatement stmt = conn.prepareStatement(query);
                     ResultSet rs = stmt.executeQuery();
 
                     int[] itemIDs = new int[5];
                     String[] names = new String[5];
-                    String[] descs = new String[5];
+                    String[] descripts = new String[5];
                     int[] prices = {150, 200, 300, 500, 1000}; // Prices in order
                     int count = 0;
 
@@ -624,10 +636,10 @@ public static void updateAnimalGrowth(Connection conn, int playerId) {
                     while (rs.next() && count < 5) {
                         itemIDs[count] = rs.getInt("itemID");
                         names[count] = rs.getString("itemname");
-                        descs[count] = rs.getString("desc");
+                        descripts[count] = rs.getString("descript");
                         System.out.println("[" + (count + 1) + "] " +
                             names[count] +
-                            " - " + descs[count] +
+                            " - " + descripts[count] +
                             " (Price: " + prices[count] + ")");
                         count++;
                     }
@@ -700,7 +712,7 @@ public static void updateAnimalGrowth(Connection conn, int playerId) {
             case "3":
                 // --- SELL PRODUCTS ---
     try {
-        String query = "SELECT i.itemID, i.itemname, i.itemtype, i.specialvalue, i.`desc`, i.quantity AS stock, inv.quantity " +
+        String query = "SELECT i.itemID, i.itemname, i.itemtype, i.specialvalue, i.descript, i.quantity AS stock, inv.quantity " +
                        "FROM inventory inv JOIN items i ON inv.itemID = i.itemID " +
                        "WHERE inv.playerID = ? AND i.itemtype = 'product' AND inv.quantity > 0";
         PreparedStatement stmt = conn.prepareStatement(query);
@@ -711,7 +723,7 @@ public static void updateAnimalGrowth(Connection conn, int playerId) {
         String[] names = new String[50];
         String[] types = new String[50];
         int[] values = new int[50];
-        String[] descs = new String[50];
+        String[] descripts = new String[50];
         int[] stocks = new int[50];
         int[] quantities = new int[50];
         int count = 0;
@@ -722,11 +734,11 @@ public static void updateAnimalGrowth(Connection conn, int playerId) {
             names[count] = rs.getString("itemname");
             types[count] = rs.getString("itemtype");
             values[count] = rs.getInt("specialvalue");
-            descs[count] = rs.getString("desc");
+            descripts[count] = rs.getString("descript");
             stocks[count] = rs.getInt("stock");
             quantities[count] = rs.getInt("quantity");
             System.out.println("[" + (count + 1) + "] " +
-                names[count] + " " + descs[count] +
+                names[count] + " " + descripts[count] +
                 " Qty: " + quantities[count] +
                 ", Sell Price: " + values[count]);
             count++;
@@ -790,7 +802,7 @@ public static void updateAnimalGrowth(Connection conn, int playerId) {
     }
 }
 
-public static int getGrownProductId(int seedItemId) {
+public static int getProduceId(int seedItemId) {
     // Map seed itemIDs to grown product itemIDs
     switch (seedItemId) {
         case 1: return 6; // Turnip Seed -> Turnip
