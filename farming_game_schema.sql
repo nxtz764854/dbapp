@@ -4,7 +4,7 @@ CREATE DATABASE IF NOT EXISTS farming_game;
 USE farming_game;
 
 -- PLAYER TABLE
-CREATE TABLE IF NOT EXISTS player (
+CREATE TABLE IF NOT EXISTS players (
     playerID INT AUTO_INCREMENT PRIMARY KEY,
     playername VARCHAR(50) UNIQUE NOT NULL,
     wallet INT DEFAULT 150,
@@ -24,17 +24,17 @@ CREATE TABLE IF NOT EXISTS items (
 );
 
 -- INVENTORY TABLE
-CREATE TABLE IF NOT EXISTS inventory (
+CREATE TABLE IF NOT EXISTS inventories (
     playerID INT,
     itemID INT,
     quantity INT DEFAULT 1,
     PRIMARY KEY (playerID, itemID),
-    FOREIGN KEY (playerID) REFERENCES player(playerID) ON DELETE CASCADE,
+    FOREIGN KEY (playerID) REFERENCES players(playerID) ON DELETE CASCADE,
     FOREIGN KEY (itemID) REFERENCES items(itemID) ON DELETE CASCADE
 );
 
 -- CROP TABLE
-CREATE TABLE IF NOT EXISTS crop (
+CREATE TABLE IF NOT EXISTS crops (
     cropID INT PRIMARY KEY AUTO_INCREMENT,
     playerID INT,
     itemID INT,
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS crop (
     growth_time INT,
     produceID INT,
     readytoharvest BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (playerID) REFERENCES player(playerID) ON DELETE CASCADE,
+    FOREIGN KEY (playerID) REFERENCES players(playerID) ON DELETE CASCADE,
     FOREIGN KEY (itemID) REFERENCES items(itemID)
 );
 
@@ -56,16 +56,18 @@ CREATE TABLE IF NOT EXISTS animals (
     producedays INT,
     produceID INT,
     readytoharvest BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (playerID) REFERENCES player(playerID) ON DELETE CASCADE,
+    FOREIGN KEY (playerID) REFERENCES players(playerID) ON DELETE CASCADE,
     FOREIGN KEY (itemID) REFERENCES items(itemID)
 );
 
 -- FARM TABLE
-CREATE TABLE IF NOT EXISTS farm (
+CREATE TABLE IF NOT EXISTS farms (
     playerID INT PRIMARY KEY,
-    cropname VARCHAR(50),
-    animalname VARCHAR(50),
-    FOREIGN KEY (playerID) REFERENCES player(playerID) ON DELETE CASCADE
+    cropID INT,
+    animalID INT,
+    FOREIGN KEY (playerID) REFERENCES players(playerID) ON DELETE CASCADE
+    FOREIGN KEY (cropID) REFERENCES crops(cropID) ON DELETE CASCADE
+    FOREIGN KEY (animalID) REFERENCES animals(animalID) ON DELETE CASCADE
 );
 
 -- NPCS TABLE
@@ -78,11 +80,11 @@ CREATE TABLE IF NOT EXISTS npcs (
 -- RELATIONS TABLE
 CREATE TABLE IF NOT EXISTS relations (
     playerID INT,
-    npcname VARCHAR(50),
+    npcID INT,
     npchearts INT DEFAULT 0,
-    PRIMARY KEY (playerID, npcname),
+    PRIMARY KEY (playerID, npcID),
     FOREIGN KEY (playerID) REFERENCES player(playerID) ON DELETE CASCADE,
-    FOREIGN KEY (npcname) REFERENCES npcs(npcname)
+    FOREIGN KEY (npcID) REFERENCES npcs(npcID)
 );
 
 INSERT INTO items (itemID, itemname, itemtype,  specialvalue, descript, quantity)
