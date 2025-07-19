@@ -62,6 +62,7 @@ public class Main {
     System.out.println("4. Relationships");
     System.out.println("5. Rest (Advance to Next Day)");
     System.out.println("6. Sign out");
+    System.out.println("10. Show produce report");
 
     System.out.print("Enter your choice: ");
     int choice = scanner.nextInt();
@@ -86,6 +87,10 @@ public class Main {
         case 6:
            System.out.println("Signed out. Goodbye!");
             System.exit(0);
+            break;
+
+        case 10:
+            displayAllLogs(conn);
             break;
         default:
             System.out.println("Invalid choice.");
@@ -909,6 +914,30 @@ public static String[] getCurrentGameTime(Connection conn, int playerId) throws 
         result[2] = String.valueOf(rs.getInt("current_year")); // year
     }
     return result;
+}
+
+public static void displayAllLogs(Connection conn) {
+    String query = "SELECT logID, playerID, season, action, day, year, timestamp FROM logs ORDER BY year, season, day, timestamp";
+    try (PreparedStatement stmt = conn.prepareStatement(query);
+         ResultSet rs = stmt.executeQuery()) {
+
+        System.out.println("======= PRODUCE REPORT =======");
+        while (rs.next()) {
+            int logID = rs.getInt("logID");
+            int playerID = rs.getInt("playerID");
+            String season = rs.getString("season");
+            String action = rs.getString("action");
+            int day = rs.getInt("day");
+            int year = rs.getInt("year");
+            Timestamp timestamp = rs.getTimestamp("timestamp");
+
+            System.out.printf("Log #%d | Player: %d | %s %d, Year %d | Action: %s | Time: %s%n",
+                    logID, playerID, season, day, year, action, timestamp.toString());
+        }
+        System.out.println("====================");
+    } catch (SQLException e) {
+        System.out.println("Error displaying logs: " + e.getMessage());
+    }
 }
 
 public static int getProduceId(int seedItemId) {
