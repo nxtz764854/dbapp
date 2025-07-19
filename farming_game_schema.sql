@@ -87,6 +87,16 @@ CREATE TABLE IF NOT EXISTS relations (
     FOREIGN KEY (npcID) REFERENCES npcs(npcID)
 );
 
+CREATE TABLE IF NOT EXISTS logs (
+    logID INT AUTO_INCREMENT PRIMARY KEY,
+    playerID INT,
+    action TEXT,
+    season ENUM('Spring', 'Summer', 'Fall', 'Winter'),
+    day INT,
+    year INT,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
 INSERT INTO items (itemID, itemname, itemtype,  specialvalue, descript, quantity)
 VALUES
 (1, 'Turnip Seed', 'crop', 1, 'A fast-growing root vegetable. Grows in 1 day.', 9999),
