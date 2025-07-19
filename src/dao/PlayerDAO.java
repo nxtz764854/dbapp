@@ -179,4 +179,26 @@ public class PlayerDAO {
         player.setCurrent_year(rs.getInt("current_year"));
         return player;
     }
+    /**
+     * Updates the current date of a player in the database.
+     * @param playerID The ID of the player to update
+     * @param day The new day of the month
+     * @param season The new season
+     * @param year The new year
+     * @return true if the update was successful, false otherwise
+     */
+    public boolean updateDate(int playerID, int day, String season, int year) {
+    String sql = "UPDATE players SET current_day = ?, current_season = ?, current_year = ? WHERE playerID = ?";
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setInt(1, day);
+        stmt.setString(2, season);
+        stmt.setInt(3, year);
+        stmt.setInt(4, playerID);
+        return stmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
 }

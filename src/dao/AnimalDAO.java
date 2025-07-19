@@ -48,7 +48,7 @@ public class AnimalDAO {
         return null;
     }
 
-    public List<Animal> getAllAnimalsForPlayer(int playerID) {
+    public List<Animal> getAnimalsByPlayerID(int playerID) {
         String sql = "SELECT * FROM animals WHERE playerID = ?";
         List<Animal> animals = new ArrayList<>();
 

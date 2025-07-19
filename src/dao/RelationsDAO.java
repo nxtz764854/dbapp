@@ -19,7 +19,7 @@ public class RelationsDAO {
      * @throws SQLException If there is a problem with the database
      */
     public boolean insertRelation(Relation relation) throws SQLException {
-        String sql = "INSERT INTO relations (playerID, npcname, npchearts) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO relations (playerID, npcID, npchearts) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, relation.getPlayerID());
             stmt.setInt(2, relation.getNpcID());
@@ -31,17 +31,17 @@ public class RelationsDAO {
     /**
      * Updates the number of hearts a player has with a given NPC.
      * @param playerID The ID of the player whose hearts to update
-     * @param npcname The name of the NPC whose hearts to update
+     * @param npcID The ID of the NPC whose hearts to update
      * @param newHearts The new number of hearts to set
      * @return true if the update was successful, false otherwise
      * @throws SQLException If there is a problem with the database
      */
-    public boolean updateHearts(int playerID, String npcname, int newHearts) throws SQLException {
-        String sql = "UPDATE relations SET npchearts = ? WHERE playerID = ? AND npcname = ?";
+    public boolean updateHearts(int playerID, int npcID, int newHearts) throws SQLException {
+        String sql = "UPDATE relations SET npchearts = ? WHERE playerID = ? AND npcID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, newHearts);
             stmt.setInt(2, playerID);
-            stmt.setString(3, npcname);
+            stmt.setInt(3, npcID);
             return stmt.executeUpdate() > 0;
         }
     }
@@ -49,15 +49,15 @@ public class RelationsDAO {
     /**
      * Deletes a relation from the database by player ID and NPC name.
      * @param playerID The ID of the player whose relation to delete
-     * @param npcname The name of the NPC whose relation to delete
+     * @param npcID The ID of the NPC whose relation to delete
      * @return true if the deletion was successful, false otherwise
      * @throws SQLException If there is a problem with the database
      */
-    public boolean deleteRelation(int playerID, String npcname) throws SQLException {
-        String sql = "DELETE FROM relations WHERE playerID = ? AND npcname = ?";
+    public boolean deleteRelation(int playerID, int npcID) throws SQLException {
+        String sql = "DELETE FROM relations WHERE playerID = ? AND npcID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, playerID);
-            stmt.setString(2, npcname);
+            stmt.setInt(2, npcID);
             return stmt.executeUpdate() > 0;
         }
     }
@@ -65,15 +65,15 @@ public class RelationsDAO {
     /**
      * Retrieves a relation from the database by player ID and NPC name.
      * @param playerID The ID of the player whose relation to retrieve
-     * @param npcname The name of the NPC whose relation to retrieve
+     * @param npcID The ID of the NPC whose relation to retrieve
      * @return The relation if found, null otherwise
      * @throws SQLException If there is a problem with the database
      */
-    public Relation getRelation(int playerID, String npcname) throws SQLException {
-        String sql = "SELECT * FROM relations WHERE playerID = ? AND npcname = ?";
+    public Relation getRelation(int playerID, int npcID) throws SQLException {
+        String sql = "SELECT * FROM relations WHERE playerID = ? AND npcID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, playerID);
-            stmt.setString(2, npcname);
+            stmt.setInt(2, npcID);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new Relation(
@@ -113,18 +113,46 @@ public class RelationsDAO {
     /**
      * Increments the number of hearts a player has with a given NPC by a given amount.
      * @param playerID The ID of the player whose hearts to increment
-     * @param npcname The name of the NPC whose hearts to increment
+     * @param npcID The ID of the NPC whose hearts to increment
      * @param amount The amount to increment the hearts by
      * @return true if the incrementation was successful, false otherwise
      * @throws SQLException If there is a problem with the database
      */
-    public boolean incrementHearts(int playerID, String npcname, int amount) throws SQLException {
-        String sql = "UPDATE relations SET npchearts = npchearts + ? WHERE playerID = ? AND npcname = ?";
+    public boolean incrementHearts(int playerID, int npcID, int amount) throws SQLException {
+        String sql = "UPDATE relations SET npchearts = npchearts + ? WHERE playerID = ? AND npcID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, amount);
             stmt.setInt(2, playerID);
-            stmt.setString(3, npcname);
+            stmt.setInt(3, npcID);
             return stmt.executeUpdate() > 0;
         }
     }
+
+    /**
+     * Retrieves all relations for a given player from the database.
+     * @param playerID The ID of the player whose relations to retrieve
+     * @return A list of Relation objects containing all relations for the given player,
+     *         possibly empty if no relations are found.
+     * @throws SQLException If there is a problem with the database
+     */
+    public List<Relation> getRelationsByPlayer(int playerID) {
+    List<Relation> relations = new ArrayList<>();
+    String sql = "SELECT * FROM relations WHERE playerID = ?";
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setInt(1, playerID);
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            Relation relation = new Relation(
+                rs.getInt("playerID"),
+                rs.getInt("npcID"),
+                rs.getInt("npchearts")
+            );
+            relations.add(relation);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return relations;
+}
+
 }

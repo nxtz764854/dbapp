@@ -66,6 +66,30 @@ public class CropDAO {
     }
 
     /**
+     * Updates the details of a crop.
+     */
+    public boolean updateCrop(Crop crop) {
+        String sql = "UPDATE crop SET playerID = ?, itemID = ?, cropname = ?, growth_time = ?, produceID = ?, readytoharvest = ? WHERE cropID = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, crop.getPlayerID());
+            stmt.setInt(2, crop.getItemID());
+            stmt.setString(3, crop.getCropname());
+            stmt.setInt(4, crop.getGrowth_time());
+            stmt.setInt(5, crop.getProduceID());
+            stmt.setBoolean(6, crop.isReadytoharvest());
+            stmt.setInt(7, crop.getCropID());
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+
+    /**
      * Retrieves crops that are ready to harvest for a player.
      */
     public List<Crop> getReadyToHarvest(int playerID) {
@@ -127,4 +151,62 @@ public class CropDAO {
 
         return false;
     }
+
+    /**
+     * Retrieves a single crop by its cropID.
+     */
+    public Crop getCropByID(int cropID) {
+        String sql = "SELECT * FROM crop WHERE cropID = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, cropID);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Crop(
+                    rs.getInt("cropID"),
+                    rs.getInt("playerID"),
+                    rs.getInt("itemID"),
+                    rs.getString("cropname"),
+                    rs.getInt("growth_time"),
+                    rs.getInt("produceID"),
+                    rs.getBoolean("readytoharvest")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Retrieves all crops that produce a specific item.
+     */
+    public List<Crop> getCropsByProduceID(int produceID) {
+        List<Crop> crops = new ArrayList<>();
+        String sql = "SELECT * FROM crop WHERE produceID = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, produceID);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Crop crop = new Crop(
+                    rs.getInt("cropID"),
+                    rs.getInt("playerID"),
+                    rs.getInt("itemID"),
+                    rs.getString("cropname"),
+                    rs.getInt("growth_time"),
+                    rs.getInt("produceID"),
+                    rs.getBoolean("readytoharvest")
+                );
+                crops.add(crop);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return crops;
+    }
+
+
 }

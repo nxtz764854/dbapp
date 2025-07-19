@@ -17,6 +17,7 @@ public class Crop {
         this.itemID = itemID;
         this.cropname = cropname;
         this.growth_time = growth_time;
+        this.produceID = produceID;
         this.readytoharvest = readytoharvest;
     }
 
