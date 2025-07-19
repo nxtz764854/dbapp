@@ -2,21 +2,31 @@ import java.sql.*;
 import java.util.Scanner;
 
 public class Gifts {
-    public static void main(String[] args) {
-        String url = "jdbc:mysql://localhost:3306/farming_game";
-        String user = "root";
-        String password = "root1sql";
-
+     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
         Connection conn = null;
         Statement stmt = null;
         ResultSet rs = null;
-        Scanner scanner = new Scanner(System.in);
-
 
         try {
-            // Connect to database
-            conn = DriverManager.getConnection(url, user, password);
+            // Get connection
+            conn = DBConnection.getConnection();
             System.out.println("Connected to database.");
+
+            // Get the playerID
+            int playerID = -1;
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("SELECT playerID FROM player LIMIT 1");
+            if (rs.next()) {
+                playerID = rs.getInt("playerID");
+            }
+            rs.close();
+            stmt.close();
+
+            if (playerID == -1) {
+                System.out.println("No player found.");
+                return;
+            }
 
             // Display list of townspeople
             stmt = conn.createStatement();
@@ -26,54 +36,69 @@ public class Gifts {
             while (rs.next()) {
                 int id = rs.getInt("npcID");
                 String npcName = rs.getString("npcname");
-                String givinggifttoday = rs.getString("givinggifttoday");
-                System.out.println(id + ". " + npcName + " - " + givinggifttoday);
+                boolean givingGift = rs.getBoolean("givinggifttoday");
+                System.out.println(id + ". " + npcName + " - Gave gift today? " + givingGift);
             }
-
             rs.close();
             stmt.close();
 
             // Get id of receiver npc from user
-            System.out.println("Who will you give a gift to?");
+            System.out.println("Who will you give a gift to? (Enter npcID):");
             int selectedNpc = scanner.nextInt();
 
-            // Shows the player's list of items in inventory
+            // Display player's inventory
             stmt = conn.createStatement();
             System.out.println("Your inventory:");
-            rs = stmt.executeQuery("SELECT * FROM items");
+            rs = stmt.executeQuery("SELECT * FROM items WHERE playerID = " + playerID);
 
             while (rs.next()) {
                 int id = rs.getInt("itemID");
                 String itemName = rs.getString("itemname");
                 String itemType = rs.getString("itemtype");
-                String specialvalue = rs.getString("specialvalue");
-                String quantity = rs.getString("quantity");
-                System.out.println(id + ". " + itemName + ": " + itemType + ", " + specialvalue + ", " + quantity);
+                String specialValue = rs.getString("specialvalue");
+                int quantity = rs.getInt("quantity");
+                System.out.println(id + ". " + itemName + ": " + itemType + ", " + specialValue + ", " + quantity);
             }
-
             rs.close();
             stmt.close();
 
-            // Updates the npc's givinggifttoday to true
-            String updateSql = "UPDATE npcs SET givinggifttoday = TRUE WHERE id = selectedNpc";
+            // Choose item to give
+            System.out.println("Enter the itemID to give as a gift:");
+            int itemID = scanner.nextInt();
 
-            // test lang
+            // Update NPC's gift status
+            String updateSql = "UPDATE npcs SET givinggifttoday = TRUE WHERE npcID = ?";
+            PreparedStatement updateStmt = conn.prepareStatement(updateSql);
+            updateStmt.setInt(1, selectedNpc);
+            updateStmt.executeUpdate();
+            updateStmt.close();
+
+            // Record the gift into log
+            String insertGift = "INSERT INTO giftlog (npcID, playerID, itemID) VALUES (?, ?, ?)";
+            PreparedStatement giftStmt = conn.prepareStatement(insertGift);
+            giftStmt.setInt(1, selectedNpc);
+            giftStmt.setInt(2, playerID);
+            giftStmt.setInt(3, itemID);
+            giftStmt.executeUpdate();
+            giftStmt.close();
+
+            // Confirm updated NPC info
             stmt = conn.createStatement();
             rs = stmt.executeQuery("SELECT * FROM npcs");
 
-            System.out.println("\n Updated gift:");
+            System.out.println("\nUpdated gift status:");
             while (rs.next()) {
                 int id = rs.getInt("npcID");
                 String npcName = rs.getString("npcname");
-                String givinggifttoday = rs.getString("givinggifttoday");
-                System.out.println(id + ". " + npcName + " - " + givinggifttoday);
+                boolean givingGift = rs.getBoolean("givinggifttoday");
+                System.out.println(id + ". " + npcName + " - Gave gift today? " + givingGift);
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Database error:");
+            System.out.println("Database error:");
             e.printStackTrace();
         } finally {
-            // Close everything
+            // Cleanup
             try {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
