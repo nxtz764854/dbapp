@@ -72,7 +72,7 @@ public class GiftDialog extends JDialog {
             // Item removal & logging
             // Still have to add the actual removal
             log.append("\nItem deducted from inventory.\n Gift activity logged.");
-            inventoryDAO.removeItemFromInventory()
+            inventoryDAO.removeItemFromInventory();
 
             resultArea.setText(log.toString());
         });
