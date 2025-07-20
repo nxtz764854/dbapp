@@ -14,7 +14,6 @@ public class GameService {
     private GiftLogService giftLogService;
     private HarvestLogService harvestLogService;
     private ProductLogService productLogService;
-    private ShopService shopService;
     private ShopInventoryService shopInventoryService;
     private TransactionService transactionService;
 
