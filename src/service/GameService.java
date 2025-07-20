@@ -16,6 +16,7 @@ public class GameService {
     private ProductLogService productLogService;
 
     public GameService() {
+        // Initialize all service instances
         this.playerService = new PlayerService();
         this.relationService = new RelationService();
         this.animalService = new AnimalService();
@@ -28,6 +29,7 @@ public class GameService {
     }
 
     public void advanceDay(int playerID) {
+        // Fetch player information
         Player player = playerService.getPlayerByID(playerID);
         if (player == null) return;
 
@@ -35,7 +37,7 @@ public class GameService {
         String season = player.getCurrent_season();
         int year = player.getCurrent_year();
 
-        // Advance date
+        // Advance date logic
         day++;
         if (day > 28) {
             day = 1;
@@ -45,13 +47,13 @@ public class GameService {
             }
         }
 
-        // Update player date
+        // Update player's date attributes
         player.setCurrent_day(day);
         player.setCurrent_season(season);
         player.setCurrent_year(year);
         playerService.updatePlayer(player);
 
-        // Daily resets
+        // Perform daily resets
         animalService.incrementAgesAndSetReady(playerID);
         animalService.resetReadyToHarvest(playerID);
         cropService.advanceGrowthForPlayer(playerID, day);
@@ -59,6 +61,7 @@ public class GameService {
     }
 
     private String getNextSeason(String currentSeason) {
+        // Determine next season
         return switch (currentSeason) {
             case "Spring" -> "Summer";
             case "Summer" -> "Fall";
@@ -69,6 +72,7 @@ public class GameService {
     }
 
     public boolean giveGift(int playerID, int npcID, int itemID) {
+        // Fetch player information
         Player player = playerService.getPlayerByID(playerID);
         if (player == null) return false;
 
@@ -76,27 +80,28 @@ public class GameService {
         int day = player.getCurrent_day();
         int year = player.getCurrent_year();
 
-        // Check inventory
+        // Check and remove item from inventory
         boolean removed = inventoryService.removeItemFromInventory(playerID, itemID, 1);
         if (!removed) return false;
 
-        // Create or update relation
+        // Create or update NPC relation
         Relation relation = relationService.getRelation(playerID, npcID);
         if (relation == null) {
             relationService.createRelation(playerID, npcID);
             relation = relationService.getRelation(playerID, npcID);
         }
 
-        // Add heart and update gift stats
+        // Increase relationship heart count and update gift stats
         relationService.incrementHearts(playerID, npcID, 1);
         relationService.updateGiftStats(playerID, npcID, day, relation.getGiftCountThisWeek() + 1);
 
-        // Log the gift
+        // Log the gift action
         GiftLog giftLog = new GiftLog(playerID, npcID, itemID, season, day, year);
         return giftLogService.logGift(giftLog);
     }
 
     public void harvestAnimals(int playerID) {
+        // Fetch player information
         Player player = playerService.getPlayerByID(playerID);
         if (player == null) return;
 
@@ -104,20 +109,24 @@ public class GameService {
         int day = player.getCurrent_day();
         int year = player.getCurrent_year();
 
+        // Get and process ready-to-harvest animals
         List<Animal> animals = animalService.getReadyToHarvestAnimals(playerID);
         for (Animal animal : animals) {
             int animalID = animal.getAnimalID();
             int itemID = animal.getProduceID();
 
+            // Add produce to inventory and mark animal as harvested
             inventoryService.addItemToInventory(playerID, itemID, 1);
             animalService.markHarvested(animalID);
 
+            // Log product collection
             ProductLog log = new ProductLog(playerID, animalID, itemID, 1, season, day, year);
             productLogService.logProductCollection(log);
         }
     }
 
     public void harvestCrops(int playerID) {
+        // Fetch player information
         Player player = playerService.getPlayerByID(playerID);
         if (player == null) return;
 
@@ -125,14 +134,17 @@ public class GameService {
         int day = player.getCurrent_day();
         int year = player.getCurrent_year();
 
+        // Get and process ready-to-harvest crops
         List<Crop> crops = cropService.getReadyToHarvestCrops(playerID);
         for (Crop crop : crops) {
             int cropID = crop.getCropID();
             int itemID = crop.getProduceID();
 
+            // Add produce to inventory and mark crop as harvested
             inventoryService.addItemToInventory(playerID, itemID, 1);
             cropService.markHarvested(cropID);
 
+            // Log harvest
             HarvestLog log = new HarvestLog(playerID, cropID, itemID, 1, season, day, year);
             harvestLogService.recordHarvest(log);
         }
