@@ -13,7 +13,7 @@ public class GiftDialog extends JDialog {
     private JComboBox<String> townspersonBox;
     private JComboBox<ItemDisplay> itemBox;
     private InventoryService inventoryService = new InventoryService();
-    private int playerId = 1; // For now
+    private int playerId = 1; //temporary muna
 
 
 
@@ -25,7 +25,7 @@ public class GiftDialog extends JDialog {
         townspersonBox = new JComboBox<>();
         itemBox = new JComboBox<>();
 
-        populateTownspplBox(conn); // You forgot to call this
+        populateTownspplBox(conn); 
         populateItemBox();
 
 
