@@ -2,9 +2,9 @@ package model;
 
 public class Animal {
     private int animalID;
+    private String animalname;
     private int playerID;
     private int itemID;
-    private String animalname;
     private int age;
     private int producedays;
     private int produceID;
@@ -12,11 +12,11 @@ public class Animal {
 
     public Animal() {}
 
-    public Animal(int animalID, int playerID, int itemID, String animalname, int age, int producedays, boolean readytoharvest) {
+    public Animal(int animalID, String animalname, int playerID, int itemID, int age, int producedays, boolean readytoharvest) {
         this.animalID = animalID;
+        this.animalname = animalname;
         this.playerID = playerID;
         this.itemID = itemID;
-        this.animalname = animalname;
         this.age = age;
         this.producedays = producedays;
         this.readytoharvest = readytoharvest;
@@ -28,6 +28,13 @@ public class Animal {
 
     public void setAnimalID(int animalID) { 
         this.animalID = animalID; 
+    }
+
+    public String getAnimalname() { 
+        return animalname; 
+    }
+    public void setAnimalname(String animalname) { 
+        this.animalname = animalname; 
     }
 
     public int getPlayerID() { 
@@ -44,13 +51,6 @@ public class Animal {
 
     public void setItemID(int itemID) { 
         this.itemID = itemID; 
-    }
-
-    public String getAnimalname() { 
-        return animalname; 
-    }
-    public void setAnimalname(String animalname) { 
-        this.animalname = animalname; 
     }
 
     public int getAge() { 

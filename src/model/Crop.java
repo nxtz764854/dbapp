@@ -2,23 +2,25 @@ package model;
 
 public class Crop {
     private int cropID;
+    private String cropname;
     private int playerID;
     private int itemID;
-    private String cropname;
+    private int planted_day;
     private int growth_time;
     private int produceID;
     private boolean readytoharvest;
 
     public Crop() {}
 
-    public Crop(int cropID, int playerID, int itemID, String cropname, int growth_time, int produceID, boolean readytoharvest) {
+    public Crop(int cropID, String cropname, int playerID, int itemID, int planted_day, int growth_time, int produceID, boolean readytoharvest) { 
         this.cropID = cropID;
-        this.playerID = playerID;
-        this.itemID = itemID;
         this.cropname = cropname;
-        this.growth_time = growth_time;
-        this.produceID = produceID;
-        this.readytoharvest = readytoharvest;
+        this.playerID = playerID; 
+        this.itemID = itemID; 
+        this.planted_day = planted_day;
+        this.growth_time = growth_time; 
+        this.produceID = produceID; 
+        this.readytoharvest = readytoharvest; 
     }
 
     public int getCropID() { 
@@ -27,6 +29,14 @@ public class Crop {
 
     public void setCropID(int cropID) { 
         this.cropID = cropID; 
+    }
+
+    public String getCropname() { 
+        return cropname; 
+    }
+
+    public void setCropname(String cropname) { 
+        this.cropname = cropname; 
     }
 
     public int getPlayerID() { 
@@ -45,13 +55,13 @@ public class Crop {
         this.itemID = itemID; 
     }
 
-    public String getCropname() { 
-        return cropname; 
+    public int GetPlanted_day() { 
+        return planted_day; 
     }
 
-    public void setCropname(String cropname) { 
-        this.cropname = cropname; 
-    }
+    public void setPlanted_day(int planted_day) {
+        this.planted_day = planted_day;
+    } 
 
     public int getGrowth_time() { 
         return growth_time; 

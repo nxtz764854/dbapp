@@ -4,19 +4,15 @@ public class Item {
     private int itemID;
     private String itemname;
     private String itemtype;
-    private int specialvalue;
     private String desc;
-    private int quantity;
 
     public Item() {}
 
-    public Item(int itemID, String itemname, String itemtype, int specialvalue, String desc, int quantity) {
+    public Item(int itemID, String itemname, String itemtype, String desc) {
         this.itemID = itemID;
         this.itemname = itemname;
         this.itemtype = itemtype;
-        this.specialvalue = specialvalue;
         this.desc = desc;
-        this.quantity = quantity;
     }
 
     public int getItemID() { 
@@ -43,27 +39,11 @@ public class Item {
         this.itemtype = itemtype; 
     }
 
-    public int getSpecialvalue() { 
-        return specialvalue; 
-    }
-
-    public void setSpecialvalue(int specialvalue) { 
-        this.specialvalue = specialvalue; 
-    }
-
     public String getDesc() { 
         return desc; 
     }
 
     public void setDesc(String desc) { 
         this.desc = desc; 
-    }
-
-    public int getQuantity() { 
-        return quantity; 
-    }
-
-    public void setQuantity(int quantity) { 
-        this.quantity = quantity; 
     }
 }

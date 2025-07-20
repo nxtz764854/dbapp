@@ -101,7 +101,6 @@ CREATE TABLE IF NOT EXISTS relations (
     npchearts INT DEFAULT 0,                               -- The number of hearts the player has with the NPC
     last_gift_day INT,                                     -- Track when last gift was given
     gift_count_this_week INT,                              -- Track number of gifts given this week
-    met BOOLEAN DEFAULT FALSE                              -- Whether the player has met this NPC yet
 
     PRIMARY KEY (playerID, npcID),                         -- Composite PK
     FOREIGN KEY (playerID) REFERENCES players(playerID) ON DELETE CASCADE,
