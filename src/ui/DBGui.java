@@ -10,6 +10,9 @@ import java.sql.SQLException;
 
 public class DBGui extends JFrame{
     private Connection conn;
+    private JPanel cardPanel;
+    private CardLayout cardLayout;
+
 
     public DBGui(Connection conn) {
         this.conn = conn;
@@ -34,7 +37,8 @@ public class DBGui extends JFrame{
                 }
             };
 
-            mainPanel.setLayout(new BorderLayout());
+            cardLayout = new CardLayout();
+            cardPanel = new JPanel(cardLayout);
 
             // Title
             JLabel titleLabel = new JLabel("Welcome to Stardew Valley", SwingConstants.CENTER);
@@ -118,16 +122,50 @@ public class DBGui extends JFrame{
                 centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
             }
             
-            npcButton.addActionListener(e -> new npcDialog(this));
-            farmButton.addActionListener(e -> new farmDialog(this));
-            shopButton.addActionListener(e -> new shopDialog(this));
-            inventoryButton.addActionListener(e -> new inventoryDialog(this));
-            nextDayButton.addActionListener(e -> new nextDayDialog(this));
-            reportsButton.addActionListener(e -> new reportsDialog(this));
+            npcButton.addActionListener(e -> {
+                JPanel townspeoplePanel = new npcPanel(DBGui.this);
+                cardPanel.add(townspeoplePanel, "Townspeople");
+                cardLayout.show(cardPanel, "Townspeople");
+            });
+
+            farmButton.addActionListener(e -> {
+                JPanel farmPanel = new FarmPanel(DBGui.this);
+                cardPanel.add(farmPanel, "FARM");
+                cardLayout.show(cardPanel, "FARM");
+            });
+            
+            shopButton.addActionListener(e -> {
+                JPanel shopPanel = new ShopPanel(DBGui.this);
+                cardPanel.add(shopPanel, "SHOP");
+                cardLayout.show(cardPanel, "SHOP");
+            });
+            
+            inventoryButton.addActionListener(e -> {
+                JPanel inventoryPanel = new InventoryPanel(DBGui.this);
+                cardPanel.add(inventoryPanel, "INVENTORY");
+                cardLayout.show(cardPanel, "INVENTORY");
+            });
+            
+            nextDayButton.addActionListener(e -> {
+                JPanel nextDayPanel = new NextDayPanel(DBGui.this);
+                cardPanel.add(nextDayPanel, "NEXTDAY");
+                cardLayout.show(cardPanel, "NEXTDAY");
+            });
+            
+            reportsButton.addActionListener(e -> {
+                JPanel reportsPanel = new ReportsPanel(DBGui.this);
+                cardPanel.add(reportsPanel, "REPORTS");
+                cardLayout.show(cardPanel, "REPORTS");
+            });
 
             mainPanel.add(centerPanel, BorderLayout.CENTER);
-            add(mainPanel);
+            cardPanel.add(mainPanel, "MainMenu");
+            add(cardPanel);
             setLocationRelativeTo(null);
         });
+    }
+
+     public void showMainMenu() {
+        cardLayout.show(cardPanel, "MainMenu");
     }
 }
