@@ -16,6 +16,23 @@ public class Transaction {
     private int year;
     private Timestamp timestamp;
 
+    public Transaction() {}
+
+    public Transaction(int transactionID, int playerID, int shopID, String transactionType, int itemID, int quantity, int unitPrice, int totalAmount, String season, int day, int year, Timestamp timestamp) {
+        this.transactionID = transactionID;
+        this.playerID = playerID;
+        this.shopID = shopID;
+        this.transactionType = transactionType;
+        this.itemID = itemID;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        this.totalAmount = totalAmount;
+        this.season = season;
+        this.day = day;
+        this.year = year;
+        this.timestamp = timestamp;
+    }
+
     public int getTransactionID() { 
         return transactionID; 
     }

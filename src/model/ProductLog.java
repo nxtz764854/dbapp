@@ -13,6 +13,20 @@ public class ProductLog {
     private int year;
     private Timestamp timestamp;
 
+    public ProductLog() {}
+
+    public ProductLog(int productlogID, int playerID, int animalID, int itemID, int quantity, String season, int day, int year, Timestamp timestamp) {
+        this.productlogID = productlogID;
+        this.playerID = playerID;
+        this.animalID = animalID;
+        this.itemID = itemID;
+        this.quantity = quantity;
+        this.season = season;
+        this.day = day;
+        this.year = year;
+        this.timestamp = timestamp;
+    }
+
     public int getProductlogID() { 
         return productlogID; 
     }

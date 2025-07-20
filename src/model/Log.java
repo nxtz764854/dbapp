@@ -11,6 +11,18 @@ public class Log {
     private int year;
     private Timestamp timestamp;
 
+    public Log() {}
+
+    public Log(int logID, int playerID, String action, String season, int day, int year, Timestamp timestamp) {
+        this.logID = logID;
+        this.playerID = playerID;
+        this.action = action;
+        this.season = season;
+        this.day = day;
+        this.year = year;
+        this.timestamp = timestamp;
+    }
+
     public int getLogID() { 
         return logID; 
     

@@ -55,19 +55,19 @@ public class Crop {
         this.itemID = itemID; 
     }
 
-    public int GetPlanted_day() { 
+    public int getPlantedDay() { 
         return planted_day; 
     }
 
-    public void setPlanted_day(int planted_day) {
+    public void setPlantedDay(int planted_day) {
         this.planted_day = planted_day;
     } 
 
-    public int getGrowth_time() { 
+    public int getGrowthTime() { 
         return growth_time; 
     }
 
-    public void setGrowth_time(int growth_time) { 
+    public void setGrowthTime(int growth_time) { 
         this.growth_time = growth_time; 
     }
 
@@ -79,11 +79,11 @@ public class Crop {
         this.produceID = produceID; 
     }
 
-    public boolean isReadytoharvest() { 
+    public boolean isReadyToHarvest() { 
         return readytoharvest; 
     }
 
-    public void setReadytoharvest(boolean readytoharvest) { 
+    public void setReadytToHarvest(boolean readytoharvest) { 
         this.readytoharvest = readytoharvest; 
     }
 }

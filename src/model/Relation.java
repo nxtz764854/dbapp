@@ -4,17 +4,17 @@ public class Relation {
     private int playerID;
     private int npcID;
     private int npchearts;
-    private int last_gift_day;
-    private int gift_count_this_week;
+    private int lastGiftDay;
+    private int giftCountThisWeek;
 
     public Relation() {}
 
-    public Relation(int playerID, int npcID, int npchearts, int last_gift_day, int gift_count_this_week) {
+    public Relation(int playerID, int npcID, int npchearts, int lastGiftDay, int giftCountThisWeek) {
         this.playerID = playerID;
         this.npcID = npcID;
         this.npchearts = npchearts;
-        this.last_gift_day = last_gift_day;
-        this.gift_count_this_week = gift_count_this_week;
+        this.lastGiftDay = lastGiftDay;
+        this.giftCountThisWeek = giftCountThisWeek;
     }
 
     public int getPlayerID() { 
@@ -41,19 +41,19 @@ public class Relation {
         this.npchearts = npchearts; 
     }
 
-    public int getLast_gift_day() {
-        return last_gift_day;
+    public int getLastGiftDay() {
+        return lastGiftDay;
     }
 
-    public void setLast_gift_day(int last_gift_day) {
-        this.last_gift_day = last_gift_day;
+    public void setLastGiftDay(int lastGiftDay) {
+        this.lastGiftDay = lastGiftDay;
     }
 
-    public int getGift_count_this_week() {
-        return gift_count_this_week;
+    public int getGiftCountThisWeek() {
+        return giftCountThisWeek;
     }
 
-    public void setGift_count_this_week(int gift_count_this_week) {
-        this.gift_count_this_week = gift_count_this_week;
+    public void setGiftCountThisWeek(int giftCountThisWeek) {
+        this.giftCountThisWeek = giftCountThisWeek;
     }
 }

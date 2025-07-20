@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemsDAO {
+public class ItemDAO {
 
     public boolean addItem(Item item) {
         String sql = "INSERT INTO items (itemname, itemtype, descript) VALUES (?, ?, ?)";

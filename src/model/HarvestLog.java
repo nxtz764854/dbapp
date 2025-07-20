@@ -12,6 +12,20 @@ public class HarvestLog {
     private int year;
     private Timestamp timestamp;
 
+    public HarvestLog() {}
+
+    public HarvestLog(int harvestID, int playerID, int cropID, int itemID, int quantity, String season, int day, int year, Timestamp timestamp) {
+        this.harvestID = harvestID;
+        this.playerID = playerID;
+        this.cropID = cropID;
+        this.itemID = itemID;
+        this.quantity = quantity;
+        this.season = season;
+        this.day = day;
+        this.year = year;
+        this.timestamp = timestamp;
+    }
+
     public int getHarvestID() {
         return harvestID;
     }

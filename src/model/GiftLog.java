@@ -12,6 +12,19 @@ public class GiftLog {
     private int year;
     private Timestamp timestamp;
 
+    public GiftLog() {}
+
+    public GiftLog(int giftID, int playerID, int npcID, int itemID, String season, int day, int year, Timestamp timestamp) {
+        this.giftID = giftID;
+        this.playerID = playerID;
+        this.npcID = npcID;
+        this.itemID = itemID;
+        this.season = season;
+        this.day = day;
+        this.year = year;
+        this.timestamp = timestamp;
+    }
+
     public int getGiftID() { 
         return giftID; 
     }
