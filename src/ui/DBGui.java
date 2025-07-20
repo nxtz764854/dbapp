@@ -3,7 +3,7 @@ package ui;
 import ui.*;
 import dao.*;
 import model.*;
-import java.service.*;
+import service.*;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
