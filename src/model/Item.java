@@ -4,15 +4,15 @@ public class Item {
     private int itemID;
     private String itemname;
     private String itemtype;
-    private String desc;
+    private String descript;
 
     public Item() {}
 
-    public Item(int itemID, String itemname, String itemtype, String desc) {
+    public Item(int itemID, String itemname, String itemtype, String descript) {
         this.itemID = itemID;
         this.itemname = itemname;
         this.itemtype = itemtype;
-        this.desc = desc;
+        this.descript = descript;
     }
 
     public int getItemID() { 
@@ -39,11 +39,11 @@ public class Item {
         this.itemtype = itemtype; 
     }
 
-    public String getDesc() { 
-        return desc; 
+    public String getDescript() { 
+        return descript; 
     }
 
-    public void setDesc(String desc) { 
-        this.desc = desc; 
+    public void setDescript(String descript) { 
+        this.descript = descript; 
     }
 }
