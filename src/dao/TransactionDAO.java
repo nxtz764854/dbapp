@@ -4,10 +4,15 @@ import model.Transaction;
 import util.DBConnection;
 
 import java.sql.*;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.List;
 public class TransactionDAO {
 
+    /**
+     * Inserts a transaction into the database.
+     * @param transaction the transaction to be inserted
+     * @return true if the transaction was inserted successfully, false otherwise
+     */
     public boolean insertTransaction(Transaction transaction) {
         String sql = "INSERT INTO transactions (playerID, transaction_type, itemID, quantity, unit_price, total_amount, season, day, year) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
@@ -30,6 +35,12 @@ public class TransactionDAO {
         return false;
     }
 
+    /**
+     * Retrieves a list of transactions for a player.
+     *
+     * @param playerID the ID of the player
+     * @return a list of transactions for the player
+     */
     public List<Transaction> getTransactionsByPlayer(int playerID) {
         List<Transaction> list = new ArrayList<>();
         String sql = "SELECT * FROM transactions WHERE playerID = ? ORDER BY timestamp DESC";
@@ -50,6 +61,14 @@ public class TransactionDAO {
         return list;
     }
 
+    /**
+     * Retrieves a list of transactions for a player by season and year.
+     *
+     * @param playerID the ID of the player
+     * @param season   the season
+     * @param year     the year
+     * @return a list of transactions for the player, season, and year
+     */
     public List<Transaction> getTransactionsBySeasonAndYear(int playerID, String season, int year) {
         List<Transaction> transactions = new ArrayList<>();
         String sql = "SELECT * FROM transactions WHERE playerID = ? AND season = ? AND year = ? ORDER BY timestamp DESC";
@@ -72,6 +91,11 @@ public class TransactionDAO {
         return transactions;
     }
 
+    /**
+     * Retrieves the total amount spent by a player.
+     * @param playerID the ID of the player
+     * @return the total amount spent by the player
+     */
     public int getTotalSpentByPlayer(int playerID) {
         String sql = "SELECT SUM(total_amount) FROM transactions WHERE playerID = ? AND transaction_type = 'buy'";
         try (Connection conn = DBConnection.getConnection();
@@ -88,6 +112,11 @@ public class TransactionDAO {
         return 0;
     }
 
+    /**
+     * Retrieves the total amount earned by a player.
+     * @param playerID the ID of the player
+     * @return the total amount earned by the player
+     */
     public int getTotalEarnedByPlayer(int playerID) {
         String sql = "SELECT SUM(total_amount) FROM transactions WHERE playerID = ? AND transaction_type = 'sell'";
         try (Connection conn = DBConnection.getConnection();
@@ -104,6 +133,12 @@ public class TransactionDAO {
         return 0;
     }
 
+    /**
+     * Maps a result set row to a Transaction object.
+     * @param rs the result set to map
+     * @return a Transaction object
+     * @throws SQLException if an SQL exception occurs
+     */
     private Transaction mapResultSetToTransaction(ResultSet rs) throws SQLException {
         return new Transaction(
             rs.getInt("transactionID"),
@@ -120,3 +155,4 @@ public class TransactionDAO {
         );
     }
 }
+

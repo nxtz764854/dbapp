@@ -9,6 +9,11 @@ import java.util.List;
 
 public class NPCDAO {
 
+    /**
+     * Inserts an NPC into the database
+     * @param npc the NPC to insert
+     * @return true if the insertion was successful, false otherwise
+     */
     public boolean insertNPC(NPC npc) {
         String sql = "INSERT INTO npcs (npcname, givinggifttoday) VALUES (?, ?)";
         try (Connection conn = DBConnection.getConnection();
@@ -24,6 +29,11 @@ public class NPCDAO {
         return false;
     }
 
+    /**
+     * Updates an NPC in the database
+     * @param npc the NPC to update
+     * @return true if the update was successful, false otherwise
+     */
     public boolean updateNPC(NPC npc) {
         String sql = "UPDATE npcs SET npcname = ?, givinggifttoday = ? WHERE npcID = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -40,6 +50,11 @@ public class NPCDAO {
         return false;
     }
 
+    /**
+     * Deletes an NPC from the database
+     * @param npcID the ID of the NPC to delete
+     * @return true if the deletion was successful, false otherwise
+     */
     public boolean deleteNPC(int npcID) {
         String sql = "DELETE FROM npcs WHERE npcID = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -54,6 +69,11 @@ public class NPCDAO {
         return false;
     }
 
+    /**
+     * Retrieves an NPC by ID from the database
+     * @param npcID the ID of the NPC to retrieve
+     * @return the NPC if found, null otherwise
+     */
     public NPC getNPCByID(int npcID) {
         String sql = "SELECT * FROM npcs WHERE npcID = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -72,6 +92,11 @@ public class NPCDAO {
         return null;
     }
 
+    /**
+     * Retrieves an NPC by name from the database
+     * @param npcname the name of the NPC to retrieve
+     * @return the NPC if found, null otherwise
+     */
     public NPC getNPCByName(String npcname) {
         String sql = "SELECT * FROM npcs WHERE npcname = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -90,6 +115,10 @@ public class NPCDAO {
         return null;
     }
 
+    /**
+     * Retrieves all NPCs from the database
+     * @return a list of all NPCs in the database
+     */
     public List<NPC> getAllNPCs() {
         List<NPC> npcs = new ArrayList<>();
         String sql = "SELECT * FROM npcs";
@@ -108,6 +137,12 @@ public class NPCDAO {
         return npcs;
     }
 
+    /**
+     * Sets the gift flag for an NPC to true or false
+     * @param npcID the ID of the NPC to set the flag for
+     * @param flag the value to set the flag to
+     * @return true if the update was successful, false otherwise
+     */
     public boolean setGiftFlag(int npcID, boolean flag) {
         String sql = "UPDATE npcs SET givinggifttoday = ? WHERE npcID = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -123,6 +158,10 @@ public class NPCDAO {
         return false;
     }
 
+    /**
+     * Resets all gift flags to false
+     * @return true if the update was successful, false otherwise
+     */
     public boolean resetAllGiftFlags() {
         String sql = "UPDATE npcs SET givinggifttoday = FALSE";
         try (Connection conn = DBConnection.getConnection();
@@ -136,6 +175,12 @@ public class NPCDAO {
         return false;
     }
 
+    /**
+     * Extracts an NPC from a ResultSet
+     * @param rs the ResultSet to extract from
+     * @return the extracted NPC
+     * @throws SQLException if there is an error extracting the NPC
+     */
     private NPC extractNPC(ResultSet rs) throws SQLException {
         return new NPC(
             rs.getInt("npcID"),
@@ -144,3 +189,4 @@ public class NPCDAO {
         );
     }
 }
+

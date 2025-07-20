@@ -2,6 +2,7 @@ package dao;
 
 import model.Inventory;
 import util.DBConnection;
+
 import java.sql.*;
 import java.util.*;
 
@@ -16,10 +17,12 @@ public class InventoryDAO {
         List<Inventory> list = new ArrayList<>();
         String sql = "SELECT * FROM inventory WHERE playerID = ?";
 
-        try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection(); 
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, playerID);
             ResultSet rs = stmt.executeQuery();
 
+            // Iterate over result set and create Inventory objects
             while (rs.next()) {
                 list.add(new Inventory(playerID, rs.getInt("itemID"), rs.getInt("quantity")));
             }
@@ -49,11 +52,13 @@ public class InventoryDAO {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
+                // Update existing item quantity
                 stmt = conn.prepareStatement(update);
                 stmt.setInt(1, quantity);
                 stmt.setInt(2, playerID);
                 stmt.setInt(3, itemID);
             } else {
+                // Insert new item into inventory
                 stmt = conn.prepareStatement(insert);
                 stmt.setInt(1, playerID);
                 stmt.setInt(2, itemID);
@@ -72,6 +77,7 @@ public class InventoryDAO {
      * Removes a given item from a player's inventory.
      * @param playerID The ID of the player to remove the item from
      * @param itemID The ID of the item to remove
+     * @param quantity The quantity of the item to remove
      * @return true if the removal was successful, false otherwise
      */
     public boolean removeItemFromInventory(int playerID, int itemID, int quantity) {
@@ -88,10 +94,12 @@ public class InventoryDAO {
             if (rs.next()) {
                 int currentQuantity = rs.getInt("quantity");
                 if (currentQuantity <= quantity) {
+                    // Delete the item if the current quantity is less than or equal to the removal quantity
                     stmt = conn.prepareStatement(delete);
                     stmt.setInt(1, playerID);
                     stmt.setInt(2, itemID);
                 } else {
+                    // Update the item quantity
                     stmt = conn.prepareStatement(update);
                     stmt.setInt(1, quantity);
                     stmt.setInt(2, playerID);
@@ -107,3 +115,4 @@ public class InventoryDAO {
         return false;
     }
 }
+
