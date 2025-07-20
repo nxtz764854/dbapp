@@ -246,8 +246,18 @@ public class DBGui extends JFrame{
                         int year = Integer.parseInt(yearField.getText());
                         int week = Integer.parseInt(weekField.getText());
                         List<GiftLog> logs = giftLogService.getGiftLogsForWeek(playerID, npcID, year, week);
-                        // Display logs logic
-                    }
+                        
+                        StringBuilder sb = new StringBuilder("Gift Logs:\n");
+                    for (GiftLog log : logs) {
+                        sb.append("NPC ID: ").append(log.getNpcID())
+                          .append(", Item: ").append(log.getItemName())
+                          .append(", Date: ").append(log.getDateGiven()).append("\n");
+                        }
+                        JTextArea textArea = new JTextArea(sb.toString(), 10, 30);
+                        textArea.setEditable(false);
+                        JScrollPane scrollPane = new JScrollPane(textArea);
+                        JOptionPane.showMessageDialog(null, scrollPane, "Gift Report", JOptionPane.INFORMATION_MESSAGE);
+                        }
                 });
             
                 harvestReportButton.addActionListener(evt -> {
@@ -266,7 +276,18 @@ public class DBGui extends JFrame{
                         String season = (String) seasonBox.getSelectedItem();
                         int year = Integer.parseInt(yearField.getText());
                         List<HarvestLog> logs = harvestLogService.getHarvestLogsBySeasonAndYear(playerID, season, year);
-                        // Display logs logic
+
+
+                        StringBuilder sb = new StringBuilder("Harvest Logs:\n");
+                        for (HarvestLog log : logs) {
+                            sb.append("Crop: ").append(log.getCropName())
+                              .append(", Quantity: ").append(log.getQuantity())
+                              .append(", Date: ").append(log.getDateHarvested()).append("\n");
+                        }
+                        JTextArea textArea = new JTextArea(sb.toString(), 10, 30);
+                        textArea.setEditable(false);
+                        JScrollPane scrollPane = new JScrollPane(textArea);
+                        JOptionPane.showMessageDialog(null, scrollPane, "Harvest Report", JOptionPane.INFORMATION_MESSAGE);
                     }
                 });
             
@@ -286,7 +307,17 @@ public class DBGui extends JFrame{
                         String season = (String) seasonBox.getSelectedItem();
                         int year = Integer.parseInt(yearField.getText());
                         List<ProductLog> logs = productLogService.getProductLogsBySeasonAndYear(playerID, season, year);
-                        // Display logs logic
+
+                        StringBuilder sb = new StringBuilder("Product Logs:\n");
+                    for (ProductLog log : logs) {
+                        sb.append("Product: ").append(log.getProductName())
+                          .append(", Quantity: ").append(log.getQuantityProduced())
+                          .append(", Date: ").append(log.getDateProduced()).append("\n");
+                    }
+                    JTextArea textArea = new JTextArea(sb.toString(), 10, 30);
+                    textArea.setEditable(false);
+                    JScrollPane scrollPane = new JScrollPane(textArea);
+                    JOptionPane.showMessageDialog(null, scrollPane, "Product Report", JOptionPane.INFORMATION_MESSAGE);
                     }
                 });
             
@@ -306,7 +337,17 @@ public class DBGui extends JFrame{
                         String season = (String) seasonBox.getSelectedItem();
                         int year = Integer.parseInt(yearField.getText());
                         List<Transaction> logs = transactionService.getTransactionsBySeasonAndYear(playerID, season, year);
-                        // Display logs logic
+                        StringBuilder sb = new StringBuilder("Transaction Logs:\n");
+                    for (Transaction tx : logs) {
+                        sb.append("Type: ").append(tx.getType())
+                          .append(", Item: ").append(tx.getItemName())
+                          .append(", Amount: ").append(tx.getAmount())
+                          .append(", Date: ").append(tx.getDate()).append("\n");
+                    }
+                    JTextArea textArea = new JTextArea(sb.toString(), 10, 30);
+                    textArea.setEditable(false);
+                    JScrollPane scrollPane = new JScrollPane(textArea);
+                    JOptionPane.showMessageDialog(null, scrollPane, "Transaction Report", JOptionPane.INFORMATION_MESSAGE);
                     }
                 });
             
