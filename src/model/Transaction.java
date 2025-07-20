@@ -33,6 +33,24 @@ public class Transaction {
         this.timestamp = timestamp;
     }
 
+    public Transaction(int playerID, int shopID, String transactionType, int itemID, int quantity, int unitPrice, String season, int day, int year) {
+        this.playerID = playerID;
+        this.shopID = shopID;
+        this.transactionType = transactionType;
+        this.itemID = itemID;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        this.totalAmount = unitPrice * quantity;
+        this.season = season;
+        this.day = day;
+        this.year = year;
+    }
+
+    public Transaction(int playerID, String transactionType, int itemID, int quantity, int unitPrice, String season, int day, int year) {
+    this(playerID, 0, transactionType, itemID, quantity, unitPrice, season, day, year);
+}
+
+
     public int getTransactionID() { 
         return transactionID; 
     }

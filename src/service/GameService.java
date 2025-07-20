@@ -14,6 +14,9 @@ public class GameService {
     private GiftLogService giftLogService;
     private HarvestLogService harvestLogService;
     private ProductLogService productLogService;
+    private ShopService shopService;
+    private ShopInventoryService shopInventoryService;
+    private TransactionService transactionService;
 
     public GameService() {
         // Initialize all service instances
@@ -149,4 +152,42 @@ public class GameService {
             harvestLogService.recordHarvest(log);
         }
     }
+    
+    public boolean buyItem(int playerID, int shopID, int itemID) {
+        ShopInventory item = shopInventoryService.getItemFromShop(shopID, itemID);
+        if (item == null) return false;
+
+        int price = item.getPrice();
+        Player player = playerService.getPlayerByID(playerID);
+        if (player.getWallet() < price) return false;
+
+        // Deduct wallet and update
+        player.setWallet(player.getWallet() - price);
+        playerService.updatePlayer(player);
+
+        inventoryService.addItemToInventory(playerID, itemID, 1);
+
+        Transaction transaction = new Transaction(playerID, "buy", itemID, 1, price,
+            player.getCurrent_season(), player.getCurrent_day(), player.getCurrent_year());
+        transactionService.recordTransaction(transaction);
+
+        return true;
+    }
+
+    public boolean sellItem(int playerID, int itemID, int price) {
+        boolean removed = inventoryService.removeItemFromInventory(playerID, itemID, 1);
+        if (!removed) return false;
+
+        Player player = playerService.getPlayerByID(playerID);
+        player.setWallet(player.getWallet() + price);
+        playerService.updatePlayer(player);
+
+        Transaction transaction = new Transaction(playerID, "sell", itemID, 1, price,
+            player.getCurrent_season(), player.getCurrent_day(), player.getCurrent_year());
+        transactionService.recordTransaction(transaction);
+
+        return true;
+    }
+
+
 }
