@@ -67,33 +67,11 @@ CREATE TABLE IF NOT EXISTS animals (
     FOREIGN KEY (produceID) REFERENCES items(itemID)
 );
 
--- SHOP INVENTORY TABLE
-CREATE TABLE IF NOT EXISTS shop_inventory (
-    shopID INT,                                             -- The ID of the shop
-    itemID INT,                                             -- The ID of the item
-    stock INT DEFAULT 9999,                                 -- The quantity of the item             
-    price INT NOT NULL,                                     -- Price for this item at this shop
-
-    PRIMARY KEY (shopID, itemID),
-    FOREIGN KEY (shopID) REFERENCES shops(shopID) ON DELETE CASCADE,
-    FOREIGN KEY (itemID) REFERENCES items(itemID)
-);
-
-
 -- NPCS TABLE
 CREATE TABLE IF NOT EXISTS npcs (
     npcID INT PRIMARY KEY AUTO_INCREMENT,                  -- Unique NPC ID
     npcname VARCHAR(50) UNIQUE NOT NULL,                   -- Name of the NPC, must be unique
     givinggifttoday BOOLEAN DEFAULT FALSE                  -- Indicates if the NPC is giving a gift today
-);
-
--- SHOPS TABLE
-CREATE TABLE IF NOT EXISTS shops (
-    shopID INT PRIMARY KEY AUTO_INCREMENT,                  -- Unique ID per shop
-    shopname VARCHAR(50) NOT NULL,                          -- e.g., "General Store", "Animal Vendor"
-    owner_npcID INT,                                        -- Optional: link to NPC who owns the shop
-
-    FOREIGN KEY (owner_npcID) REFERENCES npcs(npcID)
 );
 
 -- RELATIONS TABLE
