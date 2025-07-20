@@ -17,9 +17,8 @@ CREATE TABLE IF NOT EXISTS players (
 CREATE TABLE IF NOT EXISTS items (
     itemID INT PRIMARY KEY AUTO_INCREMENT,                                      -- Unique item ID
     itemname VARCHAR(50) NOT NULL,                                              -- Name of the item
-    itemtype ENUM('crop', 'animal', 'tool', 'gift', 'product') NOT NULL,        -- Item Type
-    specialvalue INT DEFAULT 0,                                                 -- Special value of the item
-    descript VARCHAR(255)                                                      -- Description of the item
+    itemtype ENUM('crop', 'animal', 'tool', 'gift', 'product') NOT NULL,        -- Item Type                                               -- Special value of the item
+    descript VARCHAR(255)                                                       -- Description of the item
 );
 
 -- INVENTORY TABLE
@@ -66,15 +65,6 @@ CREATE TABLE IF NOT EXISTS animals (
     FOREIGN KEY (produceID) REFERENCES items(itemID)
 );
 
--- SHOPS TABLE
-CREATE TABLE IF NOT EXISTS shops (
-    shopID INT PRIMARY KEY AUTO_INCREMENT,                  -- Unique ID per shop
-    shopname VARCHAR(50) NOT NULL,                          -- e.g., "General Store", "Animal Vendor"
-    owner_npcID INT,                                        -- Optional: link to NPC who owns the shop
-
-    FOREIGN KEY (owner_npcID) REFERENCES npcs(npcID)
-);
-
 -- SHOP INVENTORY TABLE
 CREATE TABLE IF NOT EXISTS shop_inventory (
     shopID INT,                                             -- The ID of the shop
@@ -93,6 +83,15 @@ CREATE TABLE IF NOT EXISTS npcs (
     npcID INT PRIMARY KEY AUTO_INCREMENT,                  -- Unique NPC ID
     npcname VARCHAR(50) UNIQUE NOT NULL,                   -- Name of the NPC, must be unique
     givinggifttoday BOOLEAN DEFAULT FALSE                  -- Indicates if the NPC is giving a gift today
+);
+
+-- SHOPS TABLE
+CREATE TABLE IF NOT EXISTS shops (
+    shopID INT PRIMARY KEY AUTO_INCREMENT,                  -- Unique ID per shop
+    shopname VARCHAR(50) NOT NULL,                          -- e.g., "General Store", "Animal Vendor"
+    owner_npcID INT,                                        -- Optional: link to NPC who owns the shop
+
+    FOREIGN KEY (owner_npcID) REFERENCES npcs(npcID)
 );
 
 -- RELATIONS TABLE
