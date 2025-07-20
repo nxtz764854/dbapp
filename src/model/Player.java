@@ -19,6 +19,10 @@ public class Player {
         this.current_year = current_year;
     }
 
+    public Player(String playername) {
+        this.playername = playername;
+    }
+
     public int getPlayerID() { 
         return playerID; 
     }
