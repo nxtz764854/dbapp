@@ -3,9 +3,11 @@ package ui;
 import service.*;
 import model.*;
 import dao.*;
+
 import javax.swing.*;
 import java.awt.*;
 
+import java.util.List;
 
 import java.sql.*;
 
@@ -98,12 +100,18 @@ public class GiftDialog extends JDialog {
     }
 
     private void populateItemBox() {
-        List<ItemDisplay> itemList = inventoryService.getInventoryItemsForPlayer(playerId);
-        itemBox.removeAllItems(); // clear any existing
-        for (ItemDisplay item : itemList) {
-            itemBox.addItem(item);
+        itemBox.removeAllItems(); // clear existing
+        List<Inventory> itemList = inventoryService.getInventoryByPlayerID(playerId);
+        ItemService itemService = new ItemService();
+
+        for (Inventory inv : itemList) {
+            Item item = itemService.getItemByID(inv.getItemID());
+            if (item != null) {
+                itemBox.addItem(new ItemDisplay(item.getItemID(), item.getItemname()));
+            }
         }
     }
+
 
 
 

@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class townspeoplePanel extends JPanel {
-    public townspeoplePanel(JFrame parent, java.sql.Connection conn) {
+    public townspeoplePanel(JFrame parent, java.sql.Connection conn, int playerID) {
         setLayout(new BorderLayout());
 
         JLabel title = new JLabel("Townspeople", SwingConstants.CENTER);

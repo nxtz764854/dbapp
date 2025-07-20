@@ -4,8 +4,12 @@ import ui.*;
 import dao.*;
 import model.*;
 import service.*;
+
 import javax.swing.*;
 import java.awt.*;
+
+import java.util.List;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -20,6 +24,8 @@ public class DBGui extends JFrame{
     private HarvestLogService harvestLogService = new HarvestLogService();
     private ProductLogService productLogService = new ProductLogService();
     private TransactionService transactionService = new TransactionService();
+
+    private int playerID;
 
     public DBGui(Connection conn) {
         this.conn = conn;
@@ -112,6 +118,13 @@ public class DBGui extends JFrame{
                     PlayerDAO playerDAO = new PlayerDAO();
                     Player player = new Player(playerName);
                     playerDAO.createPlayer(player);
+                    
+                    Player insertedPlayer = playerDAO.getPlayerByName(playerName);
+                    if (insertedPlayer != null) {
+                        this.playerID = insertedPlayer.getPlayerID();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Failed to retrieve player ID.");
+                    }
                 }
             });
 
@@ -129,8 +142,8 @@ public class DBGui extends JFrame{
                 centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
             }
             
-             npcButton.addActionListener(e -> {
-                JPanel townspeoplePanel = new townspeoplePanel(DBGui.this, conn);
+            npcButton.addActionListener(e -> {
+                JPanel townspeoplePanel = new townspeoplePanel(DBGui.this, conn, playerID);
                 cardPanel.add(townspeoplePanel, "Townspeople");
                 cardLayout.show(cardPanel, "Townspeople");
             });
@@ -159,7 +172,7 @@ public class DBGui extends JFrame{
             
                 for (Inventory inv : inventoryList) {
                     Item item = itemService.getItemByID(inv.getItemID());
-                    String itemName = (item != null) ? item.getItemName() : "Unknown Item";
+                    String itemName = (item != null) ? item.getItemname() : "Unknown Item";
             
                     sb.append(itemName)
                       .append(" x")

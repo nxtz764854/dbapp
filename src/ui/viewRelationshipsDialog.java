@@ -1,6 +1,5 @@
 package ui;
 
-import dao.RelationsDAO;
 import service.*;
 import model.*;
 
@@ -26,7 +25,7 @@ public class viewRelationshipsDialog extends JDialog {
         infoArea.setEditable(false);
 
         // Get all relations
-        List<Relation> relations = relationService.getRelationsByPlayer(playerID);
+        List<Relation> relations = relationService.getAllRelationsForPlayer(playerID);
         StringBuilder sb = new StringBuilder();
 
         for (Relation rel : relations) {
