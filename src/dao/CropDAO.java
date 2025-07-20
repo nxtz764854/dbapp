@@ -132,6 +132,20 @@ public class CropDAO {
         return crops;
     }
 
+    public boolean resetReadyToHarvestCrops(int playerID) {
+        String sql = "UPDATE crops SET readytoharvest = FALSE WHERE playerID = ? AND readytoharvest = TRUE";
+
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, playerID);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public List<Crop> getCropsByProduceID(int produceID) {
         List<Crop> crops = new ArrayList<>();
         String sql = "SELECT * FROM crops WHERE produceID = ?";

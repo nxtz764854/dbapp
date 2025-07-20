@@ -66,6 +66,29 @@ public class LogDAO {
         return logs;
     }
 
+    public List<Log> getLogsBySeasonAndYear(int playerID, String season, int year) {
+        List<Log> logs = new ArrayList<>();
+        String sql = "SELECT * FROM logs WHERE playerID = ? AND season = ? AND year = ? ORDER BY timestamp DESC";
+
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, playerID);
+            stmt.setString(2, season);
+            stmt.setInt(3, year);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                logs.add(mapResultSetToLog(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return logs;
+    }
+
+
     private Log mapResultSetToLog(ResultSet rs) throws SQLException {
         return new Log(
             rs.getInt("logID"),

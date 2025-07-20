@@ -124,6 +124,22 @@ public class RelationsDAO {
         return false;
     }
 
+    public boolean updateHearts(int playerID, int npcID, int newHearts) {
+        String sql = "UPDATE relations SET npchearts = ? WHERE playerID = ? AND npcID = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, newHearts);
+            stmt.setInt(2, playerID);
+            stmt.setInt(3, npcID);
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean incrementHearts(int playerID, int npcID, int amount) {
         String sql = "UPDATE relations SET npchearts = npchearts + ? WHERE playerID = ? AND npcID = ?";
         try (Connection conn = DBConnection.getConnection();

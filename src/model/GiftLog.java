@@ -25,6 +25,16 @@ public class GiftLog {
         this.timestamp = timestamp;
     }
 
+    public GiftLog(int playerID, int npcID, int itemID, String season, int day, int year) {
+        this.playerID = playerID;
+        this.npcID = npcID;
+        this.itemID = itemID;
+        this.season = season;
+        this.day = day;
+        this.year = year;
+    }
+
+
     public int getGiftID() { 
         return giftID; 
     }

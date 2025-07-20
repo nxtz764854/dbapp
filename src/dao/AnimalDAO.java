@@ -151,6 +151,43 @@ public class AnimalDAO {
         return animals;
     }
 
+    public boolean incrementAnimalAgesAndSetReady(int playerID) {
+        String sql = """
+            UPDATE animals 
+            SET age = age + 1,
+                readytoharvest = CASE 
+                    WHEN age + 1 >= producedays THEN TRUE 
+                    ELSE readytoharvest 
+                END
+            WHERE playerID = ?
+        """;
+
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, playerID);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean resetReadyToHarvestAnimals(int playerID) {
+        String sql = "UPDATE animals SET readytoharvest = FALSE WHERE playerID = ? AND readytoharvest = TRUE";
+
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, playerID);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
     private Animal extractAnimal(ResultSet rs) throws SQLException {
         Animal animal = new Animal();
         animal.setAnimalID(rs.getInt("animalID"));

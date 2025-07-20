@@ -57,4 +57,61 @@ public class HarvestDAO {
 
         return logs;
     }
+
+    public List<HarvestLog> getHarvestLogsBySeasonAndYear(int playerID, String season, int year) {
+        List<HarvestLog> logs = new ArrayList<>();
+        String sql = "SELECT * FROM harvest_logs WHERE playerID = ? AND season = ? AND year = ? ORDER BY timestamp DESC";
+
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, playerID);
+            stmt.setString(2, season);
+            stmt.setInt(3, year);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                logs.add(mapResultSetToHarvestLog(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return logs;
+    }
+
+    public int getTotalHarvestedQuantityByItem(int playerID, int itemID) {
+        String sql = "SELECT SUM(quantity) FROM harvest_logs WHERE playerID = ? AND itemID = ?";
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, playerID);
+            stmt.setInt(2, itemID);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1); // SUM(quantity)
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    private HarvestLog mapResultSetToHarvestLog(ResultSet rs) throws SQLException {
+        return new HarvestLog(
+            rs.getInt("harvestID"),
+            rs.getInt("playerID"),
+            rs.getInt("cropID"),
+            rs.getInt("itemID"),
+            rs.getInt("quantity"),
+            rs.getString("season"),
+            rs.getInt("day"),
+            rs.getInt("year"),
+            rs.getTimestamp("timestamp")
+        );
+    }
+
 }

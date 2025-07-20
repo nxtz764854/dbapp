@@ -27,6 +27,16 @@ public class ProductLog {
         this.timestamp = timestamp;
     }
 
+    public ProductLog(int playerID, int animalID, int itemID, int quantity, String season, int day, int year) {
+        this.playerID = playerID;
+        this.animalID = animalID;
+        this.itemID = itemID;
+        this.quantity = quantity;
+        this.season = season;
+        this.day = day;
+        this.year = year;
+    }
+
     public int getProductlogID() { 
         return productlogID; 
     }

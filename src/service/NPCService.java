@@ -3,7 +3,6 @@ package service;
 import dao.NPCDAO;
 import model.NPC;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class NPCService {
@@ -13,15 +12,11 @@ public class NPCService {
         this.npcDAO = new NPCDAO();
     }
 
-    public boolean createNPC(String npcname, boolean givinggifttoday) {
-        NPC npc = new NPC();
-        npc.setNpcname(npcname);
-        npc.setGivinggifttoday(givinggifttoday);
+    public boolean addNPC(NPC npc) {
         return npcDAO.insertNPC(npc);
     }
 
-    public boolean updateNPC(int npcID, String newName, boolean giftFlag) {
-        NPC npc = new NPC(npcID, newName, giftFlag);
+    public boolean updateNPC(NPC npc) {
         return npcDAO.updateNPC(npc);
     }
 
@@ -29,29 +24,23 @@ public class NPCService {
         return npcDAO.deleteNPC(npcID);
     }
 
-    public NPC getNPC(int npcID) {
+    public NPC getNPCByID(int npcID) {
         return npcDAO.getNPCByID(npcID);
     }
 
-    public NPC getNPCByName(String name) {
-        return npcDAO.getNPCByName(name);
+    public NPC getNPCByName(String npcname) {
+        return npcDAO.getNPCByName(npcname);
     }
 
     public List<NPC> getAllNPCs() {
-        List<NPC> npcs = npcDAO.getAllNPCs();
-        return npcs != null ? npcs : new ArrayList<>();
+        return npcDAO.getAllNPCs();
     }
-
-    public void updateGivingGiftToday(int npcID, boolean flag) {
-        npcDAO.updateGivingGiftToday(npcID, flag);
-    }
-
-    public void resetAllGiftFlags() {
-        npcDAO.resetAllGiftFlags();
-    }
-
 
     public boolean setGiftFlag(int npcID, boolean flag) {
         return npcDAO.setGiftFlag(npcID, flag);
+    }
+
+    public boolean resetAllGiftFlags() {
+        return npcDAO.resetAllGiftFlags();
     }
 }

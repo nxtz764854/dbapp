@@ -63,4 +63,75 @@ public class TransactionDAO {
 
         return list;
     }
+
+    public List<Transaction> getTransactionsBySeasonAndYear(int playerID, String season, int year) {
+        List<Transaction> transactions = new ArrayList<>();
+        String sql = "SELECT * FROM transactions WHERE playerID = ? AND season = ? AND year = ? ORDER BY timestamp DESC";
+
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, playerID);
+            stmt.setString(2, season);
+            stmt.setInt(3, year);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                transactions.add(mapResultSetToTransaction(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return transactions;
+    }
+
+    public int getTotalSpentByPlayer(int playerID) {
+        String sql = "SELECT SUM(total_amount) FROM transactions WHERE playerID = ? AND transaction_type = 'buy'";
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, playerID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int getTotalEarnedByPlayer(int playerID) {
+        String sql = "SELECT SUM(total_amount) FROM transactions WHERE playerID = ? AND transaction_type = 'sell'";
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, playerID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    private Transaction mapResultSetToTransaction(ResultSet rs) throws SQLException {
+        return new Transaction(
+            rs.getInt("transactionID"),
+            rs.getInt("playerID"),
+            rs.getInt("shopID"),
+            rs.getString("transaction_type"),
+            rs.getInt("itemID"),
+            rs.getInt("quantity"),
+            rs.getInt("unit_price"),
+            rs.getInt("total_amount"),
+            rs.getString("season"),
+            rs.getInt("day"),
+            rs.getInt("year"),
+            rs.getTimestamp("timestamp")
+        );
+    }
 }

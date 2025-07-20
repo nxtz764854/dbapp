@@ -6,7 +6,7 @@ import model.Player;
 import java.util.List;
 
 public class PlayerService {
-    private PlayerDAO playerDAO;
+    private final PlayerDAO playerDAO;
 
     public PlayerService() {
         this.playerDAO = new PlayerDAO();
@@ -16,32 +16,16 @@ public class PlayerService {
         return playerDAO.createPlayer(player);
     }
 
-    public boolean updatePlayer(Player player) {
-        return playerDAO.updatePlayer(player);
-    }
-
     public Player getPlayerByID(int playerID) {
         return playerDAO.getPlayerByID(playerID);
     }
 
-    public Player getPlayerByName(String name) {
-        return playerDAO.getPlayerByName(name);
-    }
-
-    public boolean updateWallet(int playerID, int newWallet) {
-        return playerDAO.updateWallet(playerID, newWallet);
-    }
-
-    public boolean updateDate(int playerID, int day, String season, int year) {
-        return playerDAO.updateDate(playerID, day, season, year);
-    }
-
-    public boolean playerExists(String playername) {
-        return playerDAO.playerExists(playername);
-    }
-
     public List<Player> getAllPlayers() {
         return playerDAO.getAllPlayers();
+    }
+
+    public boolean updatePlayer(Player player) {
+        return playerDAO.updatePlayer(player);
     }
 
     public boolean deletePlayer(int playerID) {

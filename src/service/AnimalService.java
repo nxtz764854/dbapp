@@ -6,60 +6,49 @@ import model.Animal;
 import java.util.List;
 
 public class AnimalService {
-    private AnimalDAO animalDAO;
+    private AnimalDAO animalDAO = new AnimalDAO();
 
-    public AnimalService() {
-        this.animalDAO = new AnimalDAO();
-    }
-
-    public List<Animal> getAnimalsByPlayerID(int playerID) {
-        return animalDAO.getAnimalsByPlayerID(playerID);
+    public boolean addAnimal(Animal animal) {
+        animalDAO.addAnimal(animal);
+        return true;
     }
 
     public Animal getAnimalByID(int animalID) {
         return animalDAO.getAnimalByID(animalID);
     }
 
-    public void addAnimal(Animal animal) {
-        animalDAO.addAnimal(animal);
+    public List<Animal> getAnimalsByPlayerID(int playerID) {
+        return animalDAO.getAnimalsByPlayerID(playerID);
     }
 
-    public void updateAnimal(Animal animal) {
-        animalDAO.updateAnimal(animal);
+    public List<Animal> getAnimalsByProduceID(int produceID) {
+        return animalDAO.getAnimalsByProduceID(produceID);
     }
 
-    public void deleteAnimal(int animalID) {
-        animalDAO.deleteAnimal(animalID);
+    public boolean incrementAgesAndSetReady(int playerID) {
+        return animalDAO.incrementAnimalAgesAndSetReady(playerID);
     }
+
+    public boolean resetReadyToHarvest(int playerID) {
+        return animalDAO.resetReadyToHarvestAnimals(playerID);
+    }
+
+    public boolean markHarvested(int animalID) {
+        return animalDAO.updateHarvestStatus(animalID, false);
+    }
+
 
     public List<Animal> getReadyToHarvestAnimals(int playerID) {
         return animalDAO.getReadyToHarvestAnimals(playerID);
     }
 
-    public void markHarvested(int animalID) {
-        Animal animal = animalDAO.getAnimalByID(animalID);
-        if (animal != null) {
-            animal.setReadytoharvest(false);
-            animalDAO.updateAnimal(animal);
-        }
+    public boolean updateAnimal(Animal animal) {
+        animalDAO.updateAnimal(animal);
+        return true;
     }
 
-    public void resetReadyToHarvest(int playerID) {
-        List<Animal> animals = animalDAO.getAnimalsByPlayerID(playerID);
-        for (Animal animal : animals) {
-            int days = animal.getProducedays();
-            if (days <= 1) {
-                animal.setReadytoharvest(true);
-                animal.setProducedays(0);
-            } else {
-                animal.setProducedays(days - 1);
-            }
-            animalDAO.updateAnimal(animal);
-        }
-    }
-
-
-    public List<Animal> getAnimalsByProduceID(int produceID) {
-        return animalDAO.getAnimalsByProduceID(produceID);
+    public boolean deleteAnimal(int animalID) {
+        animalDAO.deleteAnimal(animalID);
+        return true;
     }
 }

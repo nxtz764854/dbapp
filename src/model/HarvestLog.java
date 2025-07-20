@@ -26,6 +26,16 @@ public class HarvestLog {
         this.timestamp = timestamp;
     }
 
+    public HarvestLog(int playerID, int cropID, int itemID, int quantity, String season, int day, int year) {
+        this.playerID = playerID;
+        this.cropID = cropID;
+        this.itemID = itemID;
+        this.quantity = quantity;
+        this.season = season;
+        this.day = day;
+        this.year = year;
+    }
+
     public int getHarvestID() {
         return harvestID;
     }
