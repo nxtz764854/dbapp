@@ -1,14 +1,14 @@
 package model;
 
 public class Crop {
-    private int cropID;
-    private String cropname;
-    private int playerID;
-    private int itemID;
-    private int planted_day;
-    private int growth_time;
-    private int produceID;
-    private boolean readytoharvest;
+    private int cropID;             // Unique crop ID
+    private String cropname;        // Name of the crop
+    private int playerID;           // The player who owns the crop
+    private int itemID;             // The item ID associated with the crop
+    private int planted_day;        // The day the crop was planted
+    private int growth_time;        // The number of days required for the crop to grow
+    private int produceID;          // The item ID of the produce after harvesting
+    private boolean readytoharvest; // Indicates if the crop is ready to be harvested
 
     public Crop() {}
 

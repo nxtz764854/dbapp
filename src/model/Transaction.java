@@ -3,20 +3,35 @@ package model;
 import java.sql.Timestamp;
 
 public class Transaction {
-    private int transactionID;
-    private int playerID;
-    private String transactionType;
-    private int itemID;
-    private int quantity;
-    private int unitPrice;
-    private int totalAmount;
-    private String season;
-    private int day;
-    private int year;
-    private Timestamp timestamp;
+    private int transactionID;      // Unique transaction ID
+    private int playerID;           // The player who made the transaction
+    private String transactionType; // Type of transaction (buy or sell)
+    private int itemID;             // The item involved in the transaction
+    private int quantity;           // The quantity of the item transacted
+    private int unitPrice;          // The price per unit of the item
+    private int totalAmount;        // The total amount of the transaction
+    private String season;          // The season during which the transaction occurred
+    private int day;                // The day on which the transaction occurred
+    private int year;               // The year in which the transaction occurred
+    private Timestamp timestamp;    // Timestamp of when the transaction was made
 
     public Transaction() {}
 
+    /**
+     * Inserts an existing Transaction object.
+     *
+     * @param transactionID a unique identifier for the transaction
+     * @param playerID the player who made the transaction
+     * @param transactionType the type of transaction (buy or sell)
+     * @param itemID the item involved in the transaction
+     * @param quantity the quantity of the item transacted
+     * @param unitPrice the price per unit of the item
+     * @param totalAmount the total amount of the transaction
+     * @param season the season during which the transaction occurred
+     * @param day the day on which the transaction occurred
+     * @param year the year in which the transaction occurred
+     * @param timestamp the timestamp of when the transaction was made
+     */
     public Transaction(int transactionID, int playerID, String transactionType, int itemID, int quantity, int unitPrice, int totalAmount, String season, int day, int year, Timestamp timestamp) {
         this.transactionID = transactionID;
         this.playerID = playerID;
@@ -31,6 +46,9 @@ public class Transaction {
         this.timestamp = timestamp;
     }
 
+    /**
+     * Creates a new Transaction object with the given parameters. Calculates the total amount.
+     */
     public Transaction(int playerID, String transactionType, int itemID, int quantity, int unitPrice, String season, int day, int year) {
         this.playerID = playerID;
         this.transactionType = transactionType;

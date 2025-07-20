@@ -3,17 +3,29 @@ package model;
 import java.sql.Timestamp;
 
 public class GiftLog {
-    private int giftID;
-    private int playerID;
-    private int npcID;
-    private int itemID;
-    private String season;
-    private int day;
-    private int year;
-    private Timestamp timestamp;
+    private int giftID;             // Unique gift ID
+    private int playerID;           // The player who gave the gift
+    private int npcID;              // The NPC that received the gift
+    private int itemID;             // The item that was given as a gift
+    private String season;          // The season when the gift was given
+    private int day;                // The day of the year when the gift was given
+    private int year;               // The year when the gift was given
+    private Timestamp timestamp;    // Timestamp when the gift was given
 
     public GiftLog() {}
 
+    /**
+     * Insert an existing GiftLog with all the information.
+     *
+     * @param giftID Unique gift ID
+     * @param playerID The player who gave the gift
+     * @param npcID The NPC that received the gift
+     * @param itemID The item that was given as a gift
+     * @param season The season when the gift was given
+     * @param day The day of the year when the gift was given
+     * @param year The year when the gift was given
+     * @param timestamp Timestamp when the gift was given
+     */
     public GiftLog(int giftID, int playerID, int npcID, int itemID, String season, int day, int year, Timestamp timestamp) {
         this.giftID = giftID;
         this.playerID = playerID;
@@ -25,6 +37,9 @@ public class GiftLog {
         this.timestamp = timestamp;
     }
 
+    /**
+     * Create a new GiftLog with all the information except the unique gift ID.
+     */
     public GiftLog(int playerID, int npcID, int itemID, String season, int day, int year) {
         this.playerID = playerID;
         this.npcID = npcID;

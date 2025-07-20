@@ -1,9 +1,9 @@
 package model;
 
 public class NPC {
-    private int npcID;
-    private String npcname;
-    private boolean givinggifttoday;
+    private int npcID;                  // Unique NPC ID
+    private String npcname;             // Name of the NPC
+    private boolean givinggifttoday;    // Indicates if the NPC is giving a gift today
 
     public NPC() {}
 

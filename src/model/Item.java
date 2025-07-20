@@ -1,12 +1,12 @@
 package model;
 
 public class Item {
-    private int itemID;
-    private String itemname;
-    private String itemtype;
-    private String descript;
-    private int price;
-    private boolean buyable;
+    private int itemID;         // item ID
+    private String itemname;    // item name
+    private String itemtype;    // item type
+    private String descript;    // item description
+    private int price;          // item price
+    private boolean buyable;    // whether the item is buyable
 
     public Item() {}
 

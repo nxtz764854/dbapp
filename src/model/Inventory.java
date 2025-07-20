@@ -1,9 +1,9 @@
 package model;
 
 public class Inventory {
-    private int playerID;
-    private int itemID;
-    private int quantity;
+    private int playerID;   // ID of the player
+    private int itemID;     // ID of the item
+    private int quantity;   // Quantity of the item
 
     public Inventory() {}
 

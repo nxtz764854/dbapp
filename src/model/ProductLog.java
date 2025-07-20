@@ -3,18 +3,31 @@ package model;
 import java.sql.Timestamp;
 
 public class ProductLog {
-    private int productlogID;
-    private int playerID;
-    private int animalID;
-    private int itemID;
-    private int quantity;
-    private String season;
-    private int day;
-    private int year;
-    private Timestamp timestamp;
+    private int productlogID;       // Unique log ID
+    private int playerID;           // The player who produced the product
+    private int animalID;           // The animal that produced the product
+    private int itemID;             // The item that was produced
+    private int quantity;           // The quantity of the item that was produced
+    private String season;          // The current season when the product was produced
+    private int day;                // The current day when the product was produced
+    private int year;               // The current year when the product was produced
+    private Timestamp timestamp;    // Timestamp when the product was produced
 
     public ProductLog() {}
 
+    /**
+     * Inserts an existing ProductLog object with all parameters.
+     * 
+     * @param productlogID the unique log ID
+     * @param playerID the player who produced the product
+     * @param animalID the animal that produced the product
+     * @param itemID the item that was produced
+     * @param quantity the quantity of the item that was produced
+     * @param season the current season when the product was produced
+     * @param day the current day when the product was produced
+     * @param year the current year when the product was produced
+     * @param timestamp the timestamp when the product was produced
+     */
     public ProductLog(int productlogID, int playerID, int animalID, int itemID, int quantity, String season, int day, int year, Timestamp timestamp) {
         this.productlogID = productlogID;
         this.playerID = playerID;
@@ -27,6 +40,9 @@ public class ProductLog {
         this.timestamp = timestamp;
     }
 
+    /**
+     * Creates a new ProductLog object without log ID.
+     */
     public ProductLog(int playerID, int animalID, int itemID, int quantity, String season, int day, int year) {
         this.playerID = playerID;
         this.animalID = animalID;

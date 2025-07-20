@@ -1,14 +1,14 @@
 package model;
 
 public class Animal {
-    private int animalID;
-    private String animalname;
-    private int playerID;
-    private int itemID;
-    private int age;
-    private int producedays;
-    private int produceID;
-    private boolean readytoharvest;
+    private int animalID;               // Unique ID of the animal
+    private String animalname;          // Name of the animal
+    private int playerID;               // ID of the player who owns the animal
+    private int itemID;                 // ID of the item associated with the animal
+    private int age;                    // Age of the animal
+    private int producedays;            // Days required to produce
+    private int produceID;              // ID of the produce item
+    private boolean readytoharvest;     // Status if the animal is ready to harvest
 
     public Animal() {}
 

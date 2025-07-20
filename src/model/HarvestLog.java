@@ -2,18 +2,31 @@ package model;
 
 import java.sql.Timestamp;
 public class HarvestLog {
-    private int harvestID;
-    private int playerID;
-    private int cropID;
-    private int itemID;
-    private int quantity;
-    private String season;
-    private int day;
-    private int year;
-    private Timestamp timestamp;
+    private int harvestID;          // unique harvest log ID
+    private int playerID;           // player who harvested the crop
+    private int cropID;             // the crop that was harvested
+    private int itemID;             // the item that was produced by harvesting the crop
+    private int quantity;           // quantity of the item that was produced
+    private String season;          // the season when the crop was harvested
+    private int day;                // the day when the crop was harvested
+    private int year;               // the year when the crop was harvested
+    private Timestamp timestamp;    // timestamp when the crop was harvested
 
     public HarvestLog() {}
 
+    /**
+     * Inserts an existing HarvestLog with all parameters.
+     *
+     * @param harvestID  unique harvest log ID
+     * @param playerID   player who harvested the crop
+     * @param cropID     the crop that was harvested
+     * @param itemID     the item that was produced by harvesting the crop
+     * @param quantity   quantity of the item that was produced
+     * @param season     the season when the crop was harvested
+     * @param day        the day when the crop was harvested
+     * @param year       the year when the crop was harvested
+     * @param timestamp  timestamp when the crop was harvested
+     */
     public HarvestLog(int harvestID, int playerID, int cropID, int itemID, int quantity, String season, int day, int year, Timestamp timestamp) {
         this.harvestID = harvestID;
         this.playerID = playerID;
@@ -26,6 +39,9 @@ public class HarvestLog {
         this.timestamp = timestamp;
     }
 
+    /**
+     * Constructs a HarvestLog object without harvestID. This is used for inserting a new harvest log into the database.
+     */
     public HarvestLog(int playerID, int cropID, int itemID, int quantity, String season, int day, int year) {
         this.playerID = playerID;
         this.cropID = cropID;

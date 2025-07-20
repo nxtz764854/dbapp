@@ -1,11 +1,11 @@
 package model;
 
 public class Relation {
-    private int playerID;
-    private int npcID;
-    private int npchearts;
-    private int lastGiftDay;
-    private int giftCountThisWeek;
+    private int playerID;           // The player who has the relation with the NPC
+    private int npcID;              // The NPC with whom the player has a relation
+    private int npchearts;          // The number of hearts the player has with the NPC
+    private int lastGiftDay;        // Track when last gift was given
+    private int giftCountThisWeek;  // Track number of gifts given this week
 
     public Relation() {}
 

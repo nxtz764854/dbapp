@@ -1,12 +1,12 @@
 package model;
 
 public class Player {
-    private int playerID;
-    private String playername;
-    private int wallet;
-    private int current_day;
-    private String current_season;
-    private int current_year;
+    private int playerID;           // Unique player ID
+    private String playername;      // Player name
+    private int wallet;             // Player wallet
+    private int current_day;        // Current day
+    private String current_season;  // Current season
+    private int current_year;       // Current year
 
     public Player() {}
 
