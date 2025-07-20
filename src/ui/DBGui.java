@@ -149,9 +149,23 @@ public class DBGui extends JFrame{
             });
 
             farmButton.addActionListener(e -> {
-                JPanel farmPanel = new FarmPanel(DBGui.this);
-                cardPanel.add(farmPanel, "FARM");
-                cardLayout.show(cardPanel, "FARM");
+                String[] options = {"Harvest Crops", "Collect Animal Products"};
+                int choice = JOptionPane.showOptionDialog(
+                        null,
+                        "Choose a farm activity:",
+                        "Farm Actions",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        options,
+                        options[0]
+                );
+
+                if (choice == 0) {
+                    new HarvestDialog(DBGui.this, playerID); // Show crop harvest dialog
+                } else if (choice == 1) {
+                    new CollectDialog(DBGui.this, playerID); // Show animal products dialog
+                }
             });
             
             shopButton.addActionListener(e -> {
