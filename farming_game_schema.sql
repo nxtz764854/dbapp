@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS items (
     itemID INT PRIMARY KEY AUTO_INCREMENT,                                      -- Unique item ID
     itemname VARCHAR(50) NOT NULL,                                              -- Name of the item
     itemtype ENUM('crop', 'animal', 'tool', 'gift', 'product') NOT NULL,        -- Item Type                                        
-    descript VARCHAR(255)                                                       -- Description of the item
+    descript VARCHAR(255),                                                       -- Description of the item
     itemprice INT DEFAULT 0,                                                     -- Price of the item
     buyable BOOLEAN                                                             -- Flag indicating if the item is buyable
 );
@@ -167,31 +167,30 @@ CREATE TABLE IF NOT EXISTS transactions (
 
     FOREIGN KEY (playerID) REFERENCES players(playerID) ON DELETE CASCADE,
     FOREIGN KEY (itemID) REFERENCES items(itemID),
-    FOREIGN KEY (shopID) REFERENCES shops(shopID)
 );
 
-INSERT INTO items (itemID, itemname, itemtype, descript, quantity)
+INSERT INTO items (itemID, itemname, itemtype, descript)
 VALUES
-(1, 'Turnip Seed', 'crop', 1, 'A fast-growing root vegetable. Grows in 1 day.', 9999),
-(2, 'Carrot Seed', 'crop', 2, 'A crunchy orange vegetable. Grows in 2 days.', 9999),
-(3, 'Potato Seed', 'crop', 5, 'A starchy tuber. Grows in 3 days.', 9999),
-(4, 'Tomato Seed', 'crop', 8, 'A juicy red fruit. Grows in 2 days.', 9999),
-(5, 'Pumpkin Seed', 'crop', 16, 'A large orange squash. Grows in 5 days.', 9999),
+(1, 'Turnip Seed', 'crop', 1, 'A fast-growing root vegetable. Grows in 1 day.'),
+(2, 'Carrot Seed', 'crop', 2, 'A crunchy orange vegetable. Grows in 2 days.'),
+(3, 'Potato Seed', 'crop', 5, 'A starchy tuber. Grows in 3 days.'),
+(4, 'Tomato Seed', 'crop', 8, 'A juicy red fruit. Grows in 2 days.'),
+(5, 'Pumpkin Seed', 'crop', 16, 'A large orange squash. Grows in 5 days.'),
 
-(6, 'Turnip', 'product', 30, 'A fast-growing root vegetable. Grows in 1 day.', 0),
-(7, 'Carrot', 'product', 60, 'A crunchy orange vegetable. Grows in 2 days.', 0),
-(8, 'Potato', 'product', 100, 'A starchy tuber. Grows in 3 days.', 0),
-(9, 'Tomato', 'product', 60, 'A juicy red fruit. Grows in 2 days.', 0),
-(10,'Pumpkin', 'product', 220, 'A large orange squash. Grows in 5 days.', 0),
+(6, 'Turnip', 'product', 30, 'A fast-growing root vegetable. Grows in 1 day.'),
+(7, 'Carrot', 'product', 60, 'A crunchy orange vegetable. Grows in 2 days.'),
+(8, 'Potato', 'product', 100, 'A starchy tuber. Grows in 3 days.'),
+(9, 'Tomato', 'product', 60, 'A juicy red fruit. Grows in 2 days.'),
+(10,'Pumpkin', 'product', 220, 'A large orange squash. Grows in 5 days.'),
 
-(11, 'Chicken', 'animal', 3, 'A chicken that lays eggs. Ready after 3 days.', 9999),
-(12, 'Cow', 'animal', 5, 'A cow that makes milk. Ready in 5 days.', 9999),
-(13, 'Pig', 'animal', 8, 'A Pig that grows truffles. Ready in 8 days.', 9999),
-(14, 'Sheep', 'animal', 10, 'A Sheep with shaveable wool. Ready in 10 days.', 9999),
-(15, 'Bee', 'animal', 15, 'A honey-making bee. Ready in 15 days.', 9999),
+(11, 'Chicken', 'animal', 3, 'A chicken that lays eggs. Ready after 3 days.'),
+(12, 'Cow', 'animal', 5, 'A cow that makes milk. Ready in 5 days.'),
+(13, 'Pig', 'animal', 8, 'A Pig that grows truffles. Ready in 8 days.'),
+(14, 'Sheep', 'animal', 10, 'A Sheep with shaveable wool. Ready in 10 days.'),
+(15, 'Bee', 'animal', 15, 'A honey-making bee. Ready in 15 days.'),
 
-(16, 'Egg', 'product', 30, 'A nice egg.', 0),
-(17, 'Milk', 'product', 50, 'Moo moo milkers', 0),
-(18, 'Truffle', 'product', 100, 'Did you know pigs can produce truffles?', 0),
+(16, 'Egg', 'product', 30, 'A nice egg.'),
+(17, 'Milk', 'product', 50, 'Moo moo milkers'),
+(18, 'Truffle', 'product', 100, 'Did you know pigs can produce truffles?'),
 (19, 'Wool', 'product', 200, 'Yes sir, yes sir, three bags full!.', 0),
-(20,'Honey', 'product', 500, 'Yes darling?', 0);
+(20,'Honey', 'product', 500, 'Yes darling?');
