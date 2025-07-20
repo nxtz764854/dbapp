@@ -3,6 +3,7 @@ package ui;
 import ui.*;
 import dao.*;
 import model.*;
+import java.service.*;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
@@ -12,6 +13,9 @@ public class DBGui extends JFrame{
     private Connection conn;
     private JPanel cardPanel;
     private CardLayout cardLayout;
+    private GameService gameService = new GameService();
+    private InventoryService inventoryService = new InventoryService();
+    private ItemService itemService = new ItemService();
 
 
     public DBGui(Connection conn) {
@@ -140,17 +144,37 @@ public class DBGui extends JFrame{
                 cardLayout.show(cardPanel, "SHOP");
             });
             
-            inventoryButton.addActionListener(e -> {
-                JPanel inventoryPanel = new InventoryPanel(DBGui.this);
-                cardPanel.add(inventoryPanel, "INVENTORY");
-                cardLayout.show(cardPanel, "INVENTORY");
+           inventoryButton.addActionListener(e -> {
+                List<Inventory> inventoryList = inventoryService.getInventoryByPlayerID(playerID);
+            
+                if (inventoryList.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Your inventory is empty.");
+                    return;
+                }
+            
+                StringBuilder sb = new StringBuilder("Inventory:\n");
+            
+                for (Inventory inv : inventoryList) {
+                    Item item = itemService.getItemByID(inv.getItemID());
+                    String itemName = (item != null) ? item.getItemName() : "Unknown Item";
+            
+                    sb.append(itemName)
+                      .append(" x")
+                      .append(inv.getQuantity())
+                      .append("\n");
+                }
+            
+                JOptionPane.showMessageDialog(this, sb.toString());
             });
             
             nextDayButton.addActionListener(e -> {
                 JPanel nextDayPanel = new NextDayPanel(DBGui.this);
                 cardPanel.add(nextDayPanel, "NEXTDAY");
                 cardLayout.show(cardPanel, "NEXTDAY");
+                gameService.advanceDay(playerID);
+                JOptionPane.showMessageDialog(this, "Sleeping...");
             });
+
             
             reportsButton.addActionListener(e -> {
                 JPanel reportsPanel = new ReportsPanel(DBGui.this);
