@@ -17,8 +17,10 @@ CREATE TABLE IF NOT EXISTS players (
 CREATE TABLE IF NOT EXISTS items (
     itemID INT PRIMARY KEY AUTO_INCREMENT,                                      -- Unique item ID
     itemname VARCHAR(50) NOT NULL,                                              -- Name of the item
-    itemtype ENUM('crop', 'animal', 'tool', 'gift', 'product') NOT NULL,        -- Item Type                                               -- Special value of the item
+    itemtype ENUM('crop', 'animal', 'tool', 'gift', 'product') NOT NULL,        -- Item Type                                        
     descript VARCHAR(255)                                                       -- Description of the item
+    itemprice INT DEFAULT 0,                                                     -- Price of the item
+    buyable BOOLEAN                                                             -- Flag indicating if the item is buyable
 );
 
 -- INVENTORY TABLE
@@ -175,7 +177,6 @@ CREATE TABLE IF NOT EXISTS product_logs (
 CREATE TABLE IF NOT EXISTS transactions (
     transactionID INT AUTO_INCREMENT PRIMARY KEY,           -- Unique transaction ID
     playerID INT,                                           -- The player who made the transaction
-    shopID INT,                                             -- The shop where the transaction was made
     transaction_type ENUM('buy', 'sell') NOT NULL,          -- Type of transaction (buy or sell)
     itemID INT,                                             -- The item that was bought or sold
     quantity INT,                                           -- The quantity of the item that was bought or sold
@@ -191,7 +192,7 @@ CREATE TABLE IF NOT EXISTS transactions (
     FOREIGN KEY (shopID) REFERENCES shops(shopID)
 );
 
-INSERT INTO items (itemID, itemname, itemtype,  specialvalue, descript, quantity)
+INSERT INTO items (itemID, itemname, itemtype, descript, quantity)
 VALUES
 (1, 'Turnip Seed', 'crop', 1, 'A fast-growing root vegetable. Grows in 1 day.', 9999),
 (2, 'Carrot Seed', 'crop', 2, 'A crunchy orange vegetable. Grows in 2 days.', 9999),

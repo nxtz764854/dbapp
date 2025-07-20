@@ -10,13 +10,15 @@ import java.util.List;
 public class ItemDAO {
 
     public boolean addItem(Item item) {
-        String sql = "INSERT INTO items (itemname, itemtype, descript) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO items (itemname, itemtype, descript, price, buyable) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, item.getItemname());
             stmt.setString(2, item.getItemtype());
             stmt.setString(3, item.getDescript());
+            stmt.setInt(4, item.getPrice());
+            stmt.setBoolean(5, item.isBuyable());
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -26,14 +28,16 @@ public class ItemDAO {
     }
 
     public boolean updateItem(Item item) {
-        String sql = "UPDATE items SET itemname = ?, itemtype = ?, descript = ? WHERE itemID = ?";
+        String sql = "UPDATE items SET itemname = ?, itemtype = ?, descript = ?, price = ?, buyable = ? WHERE itemID = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, item.getItemname());
             stmt.setString(2, item.getItemtype());
             stmt.setString(3, item.getDescript());
-            stmt.setInt(4, item.getItemID());
+            stmt.setInt(4, item.getPrice());
+            stmt.setBoolean(5, item.isBuyable());
+            stmt.setInt(6, item.getItemID());
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -124,12 +128,32 @@ public class ItemDAO {
         return items;
     }
 
+    public List<Item> getBuyableItems() {
+        List<Item> items = new ArrayList<>();
+        String sql = "SELECT * FROM items WHERE buyable = TRUE";
+
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                items.add(extractItem(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return items;
+    }
+
+
     private Item extractItem(ResultSet rs) throws SQLException {
         Item item = new Item();
         item.setItemID(rs.getInt("itemID"));
         item.setItemname(rs.getString("itemname"));
         item.setItemtype(rs.getString("itemtype"));
         item.setDescript(rs.getString("descript"));
+        item.setPrice(rs.getInt("price"));
+        item.setBuyable(rs.getBoolean("buyable"));
         return item;
     }
 }

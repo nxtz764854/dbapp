@@ -5,7 +5,6 @@ import java.sql.Timestamp;
 public class Transaction {
     private int transactionID;
     private int playerID;
-    private int shopID;
     private String transactionType;
     private int itemID;
     private int quantity;
@@ -18,10 +17,9 @@ public class Transaction {
 
     public Transaction() {}
 
-    public Transaction(int transactionID, int playerID, int shopID, String transactionType, int itemID, int quantity, int unitPrice, int totalAmount, String season, int day, int year, Timestamp timestamp) {
+    public Transaction(int transactionID, int playerID, String transactionType, int itemID, int quantity, int unitPrice, int totalAmount, String season, int day, int year, Timestamp timestamp) {
         this.transactionID = transactionID;
         this.playerID = playerID;
-        this.shopID = shopID;
         this.transactionType = transactionType;
         this.itemID = itemID;
         this.quantity = quantity;
@@ -33,9 +31,8 @@ public class Transaction {
         this.timestamp = timestamp;
     }
 
-    public Transaction(int playerID, int shopID, String transactionType, int itemID, int quantity, int unitPrice, String season, int day, int year) {
+    public Transaction(int playerID, String transactionType, int itemID, int quantity, int unitPrice, String season, int day, int year) {
         this.playerID = playerID;
-        this.shopID = shopID;
         this.transactionType = transactionType;
         this.itemID = itemID;
         this.quantity = quantity;
@@ -46,92 +43,93 @@ public class Transaction {
         this.year = year;
     }
 
-    public Transaction(int playerID, String transactionType, int itemID, int quantity, int unitPrice, String season, int day, int year) {
-    this(playerID, 0, transactionType, itemID, quantity, unitPrice, season, day, year);
-}
+    // Getters and setters
 
-
-    public int getTransactionID() { 
-        return transactionID; 
-    }
-    public void setTransactionID(int transactionID) { 
-        this.transactionID = transactionID; 
+    public int getTransactionID() {
+        return transactionID;
     }
 
-    public int getPlayerID() { 
-        return playerID; 
-    }
-    public void setPlayerID(int playerID) { 
-        this.playerID = playerID; 
+    public void setTransactionID(int transactionID) {
+        this.transactionID = transactionID;
     }
 
-    public int getShopID() { 
-        return shopID; 
-    }
-    public void setShopID(int shopID) { 
-        this.shopID = shopID; 
+    public int getPlayerID() {
+        return playerID;
     }
 
-    public String getTransactionType() { 
-        return transactionType; 
-    }
-    public void setTransactionType(String transactionType) { 
-        this.transactionType = transactionType; 
+    public void setPlayerID(int playerID) {
+        this.playerID = playerID;
     }
 
-    public int getItemID() { 
-        return itemID; 
-    }
-    public void setItemID(int itemID) { 
-        this.itemID = itemID; 
+    public String getTransactionType() {
+        return transactionType;
     }
 
-    public int getQuantity() { 
-        return quantity; 
-    }
-    public void setQuantity(int quantity) { 
-        this.quantity = quantity; 
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
     }
 
-    public int getUnitPrice() { 
-        return unitPrice; 
-    }
-    public void setUnitPrice(int unitPrice) { 
-        this.unitPrice = unitPrice; 
+    public int getItemID() {
+        return itemID;
     }
 
-    public int getTotalAmount() { 
-        return totalAmount; 
-    }
-    public void setTotalAmount(int totalAmount) { 
-        this.totalAmount = totalAmount; 
+    public void setItemID(int itemID) {
+        this.itemID = itemID;
     }
 
-    public String getSeason() { 
-        return season; 
-    }
-    public void setSeason(String season) { 
-        this.season = season; 
+    public int getQuantity() {
+        return quantity;
     }
 
-    public int getDay() { 
-        return day; 
-    }
-    public void setDay(int day) { 
-        this.day = day; 
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
-    public int getYear() { 
-        return year; 
-    }
-    public void setYear(int year) { 
-        this.year = year; 
+    public int getUnitPrice() {
+        return unitPrice;
     }
 
-    public Timestamp getTimestamp() { 
-        return timestamp; 
+    public void setUnitPrice(int unitPrice) {
+        this.unitPrice = unitPrice;
     }
-    public void setTimestamp(Timestamp timestamp) { 
-        this.timestamp = timestamp; 
+
+    public int getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(int totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public String getSeason() {
+        return season;
+    }
+
+    public void setSeason(String season) {
+        this.season = season;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 }

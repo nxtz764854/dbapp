@@ -32,6 +32,20 @@ public class ItemService {
         return itemDAO.getItemsByType(itemType);
     }
 
+    public List<Item> getBuyableItems() {
+        return itemDAO.getBuyableItems();
+    }
+
+    public boolean isItemBuyable(int itemID) {
+        Item item = itemDAO.getItemByID(itemID);
+        return item != null && item.isBuyable();
+    }
+
+    public int getItemPrice(int itemID) {
+        Item item = itemDAO.getItemByID(itemID);
+        return (item != null) ? item.getPrice() : -1;
+    }
+
     public boolean updateItem(Item item) {
         return itemDAO.updateItem(item);
     }

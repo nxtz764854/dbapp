@@ -5,14 +5,18 @@ public class Item {
     private String itemname;
     private String itemtype;
     private String descript;
+    private int price;
+    private boolean buyable;
 
     public Item() {}
 
-    public Item(int itemID, String itemname, String itemtype, String descript) {
+    public Item(int itemID, String itemname, String itemtype, String descript, int price, boolean buyable) {
         this.itemID = itemID;
         this.itemname = itemname;
         this.itemtype = itemtype;
         this.descript = descript;
+        this.price = price;
+        this.buyable = buyable;
     }
 
     public int getItemID() { 
@@ -46,4 +50,21 @@ public class Item {
     public void setDescript(String descript) { 
         this.descript = descript; 
     }
+
+    public int getPrice() { 
+        return price; 
+    }
+
+    public void setPrice(int price) { 
+        this.price = price; 
+    }
+
+    public boolean isBuyable() { 
+        return buyable; 
+    }
+
+    public void setBuyable(boolean buyable) { 
+        this.buyable = buyable; 
+    }
+
 }

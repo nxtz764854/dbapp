@@ -10,15 +10,11 @@ import java.util.List;
 public class PlayerDAO {
 
     public boolean createPlayer(Player player) {
-        String sql = "INSERT INTO players (playername, wallet, current_day, current_season, current_year) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO players (playername) VALUES (?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, player.getPlayername());
-            stmt.setInt(2, player.getWallet());
-            stmt.setInt(3, player.getCurrent_day());
-            stmt.setString(4, player.getCurrent_season());
-            stmt.setInt(5, player.getCurrent_year());
 
             return stmt.executeUpdate() > 0;
 
