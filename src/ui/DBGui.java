@@ -129,8 +129,8 @@ public class DBGui extends JFrame{
                 centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
             }
             
-            npcButton.addActionListener(e -> {
-                JPanel townspeoplePanel = new npcPanel(DBGui.this);
+             npcButton.addActionListener(e -> {
+                JPanel townspeoplePanel = new townspeoplePanel(DBGui.this);
                 cardPanel.add(townspeoplePanel, "Townspeople");
                 cardLayout.show(cardPanel, "Townspeople");
             });
