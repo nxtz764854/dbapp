@@ -16,10 +16,10 @@ public class DBGui extends JFrame{
     private GameService gameService = new GameService();
     private InventoryService inventoryService = new InventoryService();
     private ItemService itemService = new ItemService();
-    private final GiftLogService giftLogService = new GiftLogService();
-    private final HarvestLogService harvestLogService = new HarvestLogService();
-    private final ProductLogService productLogService = new ProductLogService();
-    private final TransactionService transactionService = new TransactionService();
+    private GiftLogService giftLogService = new GiftLogService();
+    private HarvestLogService harvestLogService = new HarvestLogService();
+    private ProductLogService productLogService = new ProductLogService();
+    private TransactionService transactionService = new TransactionService();
 
     public DBGui(Connection conn) {
         this.conn = conn;
