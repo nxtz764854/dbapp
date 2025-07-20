@@ -16,7 +16,10 @@ public class DBGui extends JFrame{
     private GameService gameService = new GameService();
     private InventoryService inventoryService = new InventoryService();
     private ItemService itemService = new ItemService();
-
+    private final GiftLogService giftLogService = new GiftLogService();
+    private final HarvestLogService harvestLogService = new HarvestLogService();
+    private final ProductLogService productLogService = new ProductLogService();
+    private final TransactionService transactionService = new TransactionService();
 
     public DBGui(Connection conn) {
         this.conn = conn;
@@ -174,111 +177,112 @@ public class DBGui extends JFrame{
 
             
             reportsButton.addActionListener(e -> {
-    JPanel reportPanel = new JPanel();
-    reportPanel.setLayout(new GridLayout(5, 1, 10, 10));
+                JPanel reportPanel = new JPanel();
+                reportPanel.setLayout(new GridLayout(5, 1, 10, 10));
+            
+                JButton giftReportButton = new JButton("Gifting Report");
+                JButton harvestReportButton = new JButton("Harvest Report");
+                JButton productReportButton = new JButton("Product Report");
+                JButton transactionReportButton = new JButton("Transaction Report");
+                JButton backButton = new JButton("Back");
+            
+                giftReportButton.addActionListener(evt -> {
+                    JTextField npcIDField = new JTextField();
+                    JTextField yearField = new JTextField();
+                    JTextField weekField = new JTextField();
+            
+                    JPanel inputPanel = new JPanel(new GridLayout(3, 2));
+                    inputPanel.add(new JLabel("NPC ID:"));
+                    inputPanel.add(npcIDField);
+                    inputPanel.add(new JLabel("Year:"));
+                    inputPanel.add(yearField);
+                    inputPanel.add(new JLabel("Week Number:"));
+                    inputPanel.add(weekField);
+            
+                    int result = JOptionPane.showConfirmDialog(null, inputPanel, "Enter Gift Report Details", JOptionPane.OK_CANCEL_OPTION);
+                    if (result == JOptionPane.OK_OPTION) {
+                        int npcID = Integer.parseInt(npcIDField.getText());
+                        int year = Integer.parseInt(yearField.getText());
+                        int week = Integer.parseInt(weekField.getText());
+                        List<GiftLog> logs = giftLogService.getGiftLogsForWeek(playerID, npcID, year, week);
+                        // Display logs logic
+                    }
+                });
+            
+                harvestReportButton.addActionListener(evt -> {
+                    String[] seasons = {"Spring", "Summer", "Fall", "Winter"};
+                    JComboBox<String> seasonBox = new JComboBox<>(seasons);
+                    JTextField yearField = new JTextField();
+            
+                    JPanel inputPanel = new JPanel(new GridLayout(2, 2));
+                    inputPanel.add(new JLabel("Season:"));
+                    inputPanel.add(seasonBox);
+                    inputPanel.add(new JLabel("Year:"));
+                    inputPanel.add(yearField);
+            
+                    int result = JOptionPane.showConfirmDialog(null, inputPanel, "Enter Harvest Report Details", JOptionPane.OK_CANCEL_OPTION);
+                    if (result == JOptionPane.OK_OPTION) {
+                        String season = (String) seasonBox.getSelectedItem();
+                        int year = Integer.parseInt(yearField.getText());
+                        List<HarvestLog> logs = harvestLogService.getHarvestLogsBySeasonAndYear(playerID, season, year);
+                        // Display logs logic
+                    }
+                });
+            
+                productReportButton.addActionListener(evt -> {
+                    String[] seasons = {"Spring", "Summer", "Fall", "Winter"};
+                    JComboBox<String> seasonBox = new JComboBox<>(seasons);
+                    JTextField yearField = new JTextField();
+            
+                    JPanel inputPanel = new JPanel(new GridLayout(2, 2));
+                    inputPanel.add(new JLabel("Season:"));
+                    inputPanel.add(seasonBox);
+                    inputPanel.add(new JLabel("Year:"));
+                    inputPanel.add(yearField);
+            
+                    int result = JOptionPane.showConfirmDialog(null, inputPanel, "Enter Product Report Details", JOptionPane.OK_CANCEL_OPTION);
+                    if (result == JOptionPane.OK_OPTION) {
+                        String season = (String) seasonBox.getSelectedItem();
+                        int year = Integer.parseInt(yearField.getText());
+                        List<ProductLog> logs = productLogService.getProductLogsBySeasonAndYear(playerID, season, year);
+                        // Display logs logic
+                    }
+                });
+            
+                transactionReportButton.addActionListener(evt -> {
+                    String[] seasons = {"Spring", "Summer", "Fall", "Winter"};
+                    JComboBox<String> seasonBox = new JComboBox<>(seasons);
+                    JTextField yearField = new JTextField();
+            
+                    JPanel inputPanel = new JPanel(new GridLayout(2, 2));
+                    inputPanel.add(new JLabel("Season:"));
+                    inputPanel.add(seasonBox);
+                    inputPanel.add(new JLabel("Year:"));
+                    inputPanel.add(yearField);
+            
+                    int result = JOptionPane.showConfirmDialog(null, inputPanel, "Enter Transaction Report Details", JOptionPane.OK_CANCEL_OPTION);
+                    if (result == JOptionPane.OK_OPTION) {
+                        String season = (String) seasonBox.getSelectedItem();
+                        int year = Integer.parseInt(yearField.getText());
+                        List<Transaction> logs = transactionService.getTransactionsBySeasonAndYear(playerID, season, year);
+                        // Display logs logic
+                    }
+                });
+            
+                backButton.addActionListener(evt -> {
+                    cardLayout.show(cardPanel, "MAIN");
+                });
+            
+                reportPanel.add(giftReportButton);
+                reportPanel.add(harvestReportButton);
+                reportPanel.add(productReportButton);
+                reportPanel.add(transactionReportButton);
+                reportPanel.add(backButton);
+            
+                cardPanel.add(reportPanel, "REPORTS");
+                cardLayout.show(cardPanel, "REPORTS");
+            });
 
-    JButton giftReportButton = new JButton("Gifting Report");
-    JButton harvestReportButton = new JButton("Harvest Report");
-    JButton productReportButton = new JButton("Product Report");
-    JButton transactionReportButton = new JButton("Transaction Report");
-    JButton backButton = new JButton("Back");
-
-    giftReportButton.addActionListener(evt -> {
-        JTextField npcIDField = new JTextField();
-        JTextField yearField = new JTextField();
-        JTextField weekField = new JTextField();
-
-        JPanel inputPanel = new JPanel(new GridLayout(3, 2));
-        inputPanel.add(new JLabel("NPC ID:"));
-        inputPanel.add(npcIDField);
-        inputPanel.add(new JLabel("Year:"));
-        inputPanel.add(yearField);
-        inputPanel.add(new JLabel("Week Number:"));
-        inputPanel.add(weekField);
-
-        int result = JOptionPane.showConfirmDialog(null, inputPanel, "Enter Gift Report Details", JOptionPane.OK_CANCEL_OPTION);
-        if (result == JOptionPane.OK_OPTION) {
-            int npcID = Integer.parseInt(npcIDField.getText());
-            int year = Integer.parseInt(yearField.getText());
-            int week = Integer.parseInt(weekField.getText());
-            List<GiftLog> logs = new GiftLogService().getGiftLogsForWeek(playerID, npcID, year, week);
-            // Display logs logic
-        }
-    });
-
-    harvestReportButton.addActionListener(evt -> {
-        String[] seasons = {"Spring", "Summer", "Fall", "Winter"};
-        JComboBox<String> seasonBox = new JComboBox<>(seasons);
-        JTextField yearField = new JTextField();
-
-        JPanel inputPanel = new JPanel(new GridLayout(2, 2));
-        inputPanel.add(new JLabel("Season:"));
-        inputPanel.add(seasonBox);
-        inputPanel.add(new JLabel("Year:"));
-        inputPanel.add(yearField);
-
-        int result = JOptionPane.showConfirmDialog(null, inputPanel, "Enter Harvest Report Details", JOptionPane.OK_CANCEL_OPTION);
-        if (result == JOptionPane.OK_OPTION) {
-            String season = (String) seasonBox.getSelectedItem();
-            int year = Integer.parseInt(yearField.getText());
-            List<HarvestLog> logs = new HarvestLogService().getHarvestLogsBySeasonAndYear(playerID, season, year);
-            // Display logs logic
-        }
-    });
-
-    productReportButton.addActionListener(evt -> {
-        String[] seasons = {"Spring", "Summer", "Fall", "Winter"};
-        JComboBox<String> seasonBox = new JComboBox<>(seasons);
-        JTextField yearField = new JTextField();
-
-        JPanel inputPanel = new JPanel(new GridLayout(2, 2));
-        inputPanel.add(new JLabel("Season:"));
-        inputPanel.add(seasonBox);
-        inputPanel.add(new JLabel("Year:"));
-        inputPanel.add(yearField);
-
-        int result = JOptionPane.showConfirmDialog(null, inputPanel, "Enter Product Report Details", JOptionPane.OK_CANCEL_OPTION);
-        if (result == JOptionPane.OK_OPTION) {
-            String season = (String) seasonBox.getSelectedItem();
-            int year = Integer.parseInt(yearField.getText());
-            List<ProductLog> logs = new ProductLogService().getProductLogsBySeasonAndYear(playerID, season, year);
-            // Display logs logic
-        }
-    });
-
-    transactionReportButton.addActionListener(evt -> {
-        String[] seasons = {"Spring", "Summer", "Fall", "Winter"};
-        JComboBox<String> seasonBox = new JComboBox<>(seasons);
-        JTextField yearField = new JTextField();
-
-        JPanel inputPanel = new JPanel(new GridLayout(2, 2));
-        inputPanel.add(new JLabel("Season:"));
-        inputPanel.add(seasonBox);
-        inputPanel.add(new JLabel("Year:"));
-        inputPanel.add(yearField);
-
-        int result = JOptionPane.showConfirmDialog(null, inputPanel, "Enter Transaction Report Details", JOptionPane.OK_CANCEL_OPTION);
-        if (result == JOptionPane.OK_OPTION) {
-            String season = (String) seasonBox.getSelectedItem();
-            int year = Integer.parseInt(yearField.getText());
-            List<Transaction> logs = new TransactionService().getTransactionsBySeasonAndYear(playerID, season, year);
-            // Display logs logic
-        }
-    });
-
-    backButton.addActionListener(evt -> {
-        cardLayout.show(cardPanel, "MAIN");
-    });
-
-    reportPanel.add(giftReportButton);
-    reportPanel.add(harvestReportButton);
-    reportPanel.add(productReportButton);
-    reportPanel.add(transactionReportButton);
-    reportPanel.add(backButton);
-
-    cardPanel.add(reportPanel, "REPORTS");
-    cardLayout.show(cardPanel, "REPORTS");
-});
 
 
             mainPanel.add(centerPanel, BorderLayout.CENTER);
