@@ -1,4 +1,4 @@
-package com.stardew.dialog;
+package ui;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,7 +33,7 @@ public class CollectDialog extends JDialog {
             collectButton.addActionListener(e -> {
                 for (Animal animal : readyAnimals) {
                     animalService.markHarvested(animal.getAnimalID());
-                    inventoryService.addItemToInventory(playerID, animal.getProduceID());
+                    inventoryService.addItemToInventory(playerID, animal.getProduceID(), 1);
                 }
                 JOptionPane.showMessageDialog(this, "Animal products collected and added to inventory!");
                 dispose();
