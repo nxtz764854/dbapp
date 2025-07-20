@@ -279,8 +279,6 @@ public class DBGui extends JFrame{
                 reportPanel.add(transactionReportButton);
                 reportPanel.add(backButton);
             
-                cardPanel.add(reportPanel, "REPORTS");
-                cardLayout.show(cardPanel, "REPORTS");
             });
 
 
