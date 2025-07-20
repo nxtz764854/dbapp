@@ -132,6 +132,35 @@ public class HarvestDAO {
         return 0;
     }
 
+    public List<HarvestLog> getHarvestLogsDetailedByPlayer(int playerID) {
+        List<HarvestLog> logs = new ArrayList<>();
+        String sql = """
+            SELECT hl.*, i.itemname, c.cropname
+            FROM harvest_logs hl
+            JOIN items i ON hl.itemID = i.itemID
+            JOIN crops c ON hl.cropID = c.cropID
+            WHERE hl.playerID = ?
+            ORDER BY hl.timestamp DESC
+            """;
+
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, playerID);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                HarvestLog log = mapResultSetToHarvestLog(rs);
+                log.setItemName(rs.getString("itemname"));
+                log.setCropName(rs.getString("cropname"));
+                logs.add(log);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return logs;
+    }
+
     /**
      * Maps a result set row to a HarvestLog object.
      * @param rs the ResultSet to map

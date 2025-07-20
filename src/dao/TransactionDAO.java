@@ -133,6 +133,34 @@ public class TransactionDAO {
         return 0;
     }
 
+    public List<Transaction> getTransactionsDetailedByPlayer(int playerID) {
+        List<Transaction> list = new ArrayList<>();
+        String sql = """
+            SELECT t.*, i.itemname
+            FROM transactions t
+            JOIN items i ON t.itemID = i.itemID
+            WHERE t.playerID = ?
+            ORDER BY t.timestamp DESC
+            """;
+
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, playerID);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Transaction transaction = mapResultSetToTransaction(rs);
+                transaction.setItemName(rs.getString("itemname"));
+                list.add(transaction);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+
     /**
      * Maps a result set row to a Transaction object.
      * @param rs the result set to map

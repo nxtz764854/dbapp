@@ -122,6 +122,36 @@ public class ProductDAO {
         return 0;
     }
 
+    public List<ProductLog> getProductLogsDetailedByPlayer(int playerID) {
+        List<ProductLog> logs = new ArrayList<>();
+        String sql = """
+            SELECT pl.*, i.itemname, a.animalname
+            FROM product_logs pl
+            JOIN items i ON pl.itemID = i.itemID
+            JOIN animals a ON pl.animalID = a.animalID
+            WHERE pl.playerID = ?
+            ORDER BY pl.timestamp DESC
+            """;
+
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, playerID);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                ProductLog log = mapResultSetToProductLog(rs);
+                log.setItemName(rs.getString("itemname"));
+                log.setAnimalName(rs.getString("animalname"));
+                logs.add(log);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return logs;
+    }
+
+
     /**
      * Maps a result set row to a ProductLog object.
      * @param rs the ResultSet to map

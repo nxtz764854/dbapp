@@ -12,6 +12,9 @@ public class HarvestLog {
     private int year;               // the year when the crop was harvested
     private Timestamp timestamp;    // timestamp when the crop was harvested
 
+    private String itemName;
+    private String cropName;
+
     public HarvestLog() {}
 
     /**
@@ -123,4 +126,24 @@ public class HarvestLog {
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
+
+    public void setItemName(String itemName) {
+    this.itemName = itemName;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setCropName(String cropName) {
+        this.cropName = cropName;
+    }
+
+    public String getCropName() {
+        return cropName;
+    }
+
+    public String getDateHarvested() {
+    return season + " " + day + ", Year " + year;
+}
 }

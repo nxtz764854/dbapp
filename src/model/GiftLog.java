@@ -12,6 +12,9 @@ public class GiftLog {
     private int year;               // The year when the gift was given
     private Timestamp timestamp;    // Timestamp when the gift was given
 
+    private String itemName;
+    private String npcName;
+
     public GiftLog() {}
 
     /**
@@ -113,4 +116,14 @@ public class GiftLog {
     public void setTimestamp(Timestamp timestamp) { 
         this.timestamp = timestamp; 
     }
+
+    public String getItemName() { return itemName; }
+    public void setItemName(String itemName) { this.itemName = itemName; }
+
+    public String getNpcName() { return npcName; }
+    public void setNpcName(String npcName) { this.npcName = npcName; }
+
+    public String getDateGiven() {
+    return season + " " + day + ", Year " + year;
+}
 }

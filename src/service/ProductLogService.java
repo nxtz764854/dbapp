@@ -27,4 +27,9 @@ public class ProductLogService {
     public int getTotalProducedQuantityByItem(int playerID, int itemID) {
         return productDAO.getTotalProducedQuantityByItem(playerID, itemID);
     }
+
+    public List<ProductLog> getProductLogsDetailedByPlayer(int playerID) {
+        return productDAO.getProductLogsDetailedByPlayer(playerID);
+    }
+
 }

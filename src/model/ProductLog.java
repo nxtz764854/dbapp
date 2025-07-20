@@ -13,6 +13,9 @@ public class ProductLog {
     private int year;               // The current year when the product was produced
     private Timestamp timestamp;    // Timestamp when the product was produced
 
+    private String itemName;
+    private String animalName;
+
     public ProductLog() {}
 
     /**
@@ -124,4 +127,29 @@ public class ProductLog {
     public void setTimestamp(Timestamp timestamp) { 
         this.timestamp = timestamp; 
     }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setAnimalName(String animalName) {
+        this.animalName = animalName;
+    }
+
+    public String getAnimalName() {
+        return animalName;
+    }
+
+    public int getQuantityProduced() {
+        return quantity;
+    }
+
+    public String getDateProduced() {
+        return season + " " + day + ", Year " + year;
+    }
+
 }

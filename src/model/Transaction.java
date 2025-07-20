@@ -15,6 +15,8 @@ public class Transaction {
     private int year;               // The year in which the transaction occurred
     private Timestamp timestamp;    // Timestamp of when the transaction was made
 
+    private String itemName;
+
     public Transaction() {}
 
     /**
@@ -150,4 +152,25 @@ public class Transaction {
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public String getType() {
+    return transactionType;
+    }
+
+    public int getAmount() {
+        return totalAmount;
+    }
+
+    public String getDate() {
+        return season + " " + day + ", Year " + year;
+    }
+
 }

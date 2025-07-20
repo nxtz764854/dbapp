@@ -1,6 +1,5 @@
 package ui;
 
-import ui.*;
 import dao.*;
 import model.*;
 import service.*;
@@ -11,7 +10,6 @@ import java.awt.*;
 import java.util.List;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 public class DBGui extends JFrame{
     private Connection conn;
@@ -310,7 +308,7 @@ public class DBGui extends JFrame{
 
                         StringBuilder sb = new StringBuilder("Product Logs:\n");
                     for (ProductLog log : logs) {
-                        sb.append("Product: ").append(log.getProductName())
+                        sb.append("Product: ").append(log.getAnimalName())
                           .append(", Quantity: ").append(log.getQuantityProduced())
                           .append(", Date: ").append(log.getDateProduced()).append("\n");
                     }

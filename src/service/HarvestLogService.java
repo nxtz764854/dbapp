@@ -32,5 +32,9 @@ public class HarvestLogService {
     public int getTotalHarvestedQuantityByItem(int playerID, int itemID) {
         return harvestDAO.getTotalHarvestedQuantityByItem(playerID, itemID);
     }
+
+    public List<HarvestLog> getHarvestLogsDetailedByPlayer(int playerID) {
+    return harvestDAO.getHarvestLogsDetailedByPlayer(playerID);
+}
 }
 

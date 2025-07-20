@@ -31,4 +31,8 @@ public class TransactionService {
     public int getTotalEarnedByPlayer(int playerID) {
         return transactionDAO.getTotalEarnedByPlayer(playerID);
     }
+
+    public List<Transaction> getTransactionsDetailedByPlayer(int playerID) {
+        return transactionDAO.getTransactionsDetailedByPlayer(playerID);
+    }
 }

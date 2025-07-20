@@ -37,4 +37,8 @@ public class GiftLogService {
     public List<GiftLog> getGiftLogsForWeek(int playerID, int npcID, int year, int weekNumber) {
         return giftDAO.getGiftLogsForWeek(playerID, npcID, year, weekNumber);
     }
+
+    public List<GiftLog> getDetailedGiftLogs(int playerID) {
+        return giftDAO.getGiftLogsDetailedByPlayer(playerID);
+    }
 }

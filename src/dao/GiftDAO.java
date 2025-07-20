@@ -174,6 +174,35 @@ public class GiftDAO {
         return logs;
     }
 
+    public List<GiftLog> getGiftLogsDetailedByPlayer(int playerID) {
+        List<GiftLog> logs = new ArrayList<>();
+        String sql = """
+            SELECT gl.*, i.itemname, n.npcname
+            FROM gift_logs gl
+            JOIN items i ON gl.itemID = i.itemID
+            JOIN npcs n ON gl.npcID = n.npcID
+            WHERE gl.playerID = ?
+            ORDER BY gl.timestamp DESC
+            """;
+
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, playerID);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                GiftLog log = mapResultSetToGiftLog(rs);
+                log.setItemName(rs.getString("itemname"));
+                log.setNpcName(rs.getString("npcname"));
+                logs.add(log);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return logs;
+    }
+
     /**
      * Maps a ResultSet to a GiftLog object.
      * @param rs the ResultSet
