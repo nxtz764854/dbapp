@@ -3,6 +3,10 @@ package service;
 import model.*;
 import java.util.List;
 
+/**
+ * The GameService class handles various game operations including advancing the day,
+ * giving gifts, harvesting crops and animals, and managing transactions for items.
+ */
 public class GameService {
 
     private PlayerService playerService;
@@ -17,6 +21,9 @@ public class GameService {
     private TransactionService transactionService;
     private ItemService itemService;
 
+    /**
+     * Initializes the GameService with all necessary services.
+     */
     public GameService() {
         this.playerService = new PlayerService();
         this.relationService = new RelationService();
@@ -31,6 +38,12 @@ public class GameService {
         this.itemService = new ItemService();
     }
 
+    /**
+     * Advances the game day for a player, updating the player's day, season, and year.
+     * Also increments animal ages, advances crop growth, and resets gift flags.
+     * 
+     * @param playerID The ID of the player whose day is to be advanced.
+     */
     public void advanceDay(int playerID) {
         Player player = playerService.getPlayerByID(playerID);
         if (player == null) return;
@@ -59,6 +72,12 @@ public class GameService {
         npcService.resetAllGiftFlags();
     }
 
+    /**
+     * Determines the next season in the game cycle.
+     * 
+     * @param currentSeason The current season.
+     * @return The next season.
+     */
     private String getNextSeason(String currentSeason) {
         return switch (currentSeason) {
             case "Spring" -> "Summer";
@@ -69,6 +88,15 @@ public class GameService {
         };
     }
 
+    /**
+     * Allows a player to give a gift to an NPC, updating the player's inventory
+     * and the NPC's relationship stats.
+     * 
+     * @param playerID The ID of the player giving the gift.
+     * @param npcID The ID of the NPC receiving the gift.
+     * @param itemID The ID of the item being gifted.
+     * @return true if the gift was successfully given, false otherwise.
+     */
     public boolean giveGift(int playerID, int npcID, int itemID) {
         Player player = playerService.getPlayerByID(playerID);
         if (player == null) return false;
@@ -93,6 +121,12 @@ public class GameService {
         return giftLogService.logGift(giftLog);
     }
 
+    /**
+     * Harvests all animals ready for harvest for a player, updating the inventory
+     * and logging the harvest.
+     * 
+     * @param playerID The ID of the player harvesting animals.
+     */
     public void harvestAnimals(int playerID) {
         Player player = playerService.getPlayerByID(playerID);
         if (player == null) return;
@@ -114,6 +148,12 @@ public class GameService {
         }
     }
 
+    /**
+     * Harvests all crops ready for harvest for a player, updating the inventory
+     * and logging the harvest.
+     * 
+     * @param playerID The ID of the player harvesting crops.
+     */
     public void harvestCrops(int playerID) {
         Player player = playerService.getPlayerByID(playerID);
         if (player == null) return;
@@ -135,6 +175,13 @@ public class GameService {
         }
     }
 
+    /**
+     * Allows a player to buy an item, updating the player's inventory and wallet.
+     * 
+     * @param playerID The ID of the player buying the item.
+     * @param itemID The ID of the item being bought.
+     * @return true if the item was successfully bought, false otherwise.
+     */
     public boolean buyItem(int playerID, int itemID) {
         Item item = itemService.getItemByID(itemID);
         if (item == null || !item.isBuyable()) return false;
@@ -155,6 +202,14 @@ public class GameService {
         return true;
     }
 
+    /**
+     * Allows a player to sell an item, updating the player's inventory and wallet.
+     * 
+     * @param playerID The ID of the player selling the item.
+     * @param itemID The ID of the item being sold.
+     * @param price The price at which the item is sold.
+     * @return true if the item was successfully sold, false otherwise.
+     */
     public boolean sellItem(int playerID, int itemID, int price) {
         boolean removed = inventoryService.removeItemFromInventory(playerID, itemID, 1);
         if (!removed) return false;
@@ -170,3 +225,4 @@ public class GameService {
         return true;
     }
 }
+

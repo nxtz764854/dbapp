@@ -41,7 +41,6 @@ public class ProductDAO {
 
     /**
      * Retrieves all product logs for a specific player.
-     *
      * @param playerID the player's ID
      * @return a list of ProductLogs for the player
      */
@@ -68,7 +67,6 @@ public class ProductDAO {
 
     /**
      * Retrieves product logs for a player by season and year.
-     *
      * @param playerID the player's ID
      * @param season   the season
      * @param year     the year
@@ -99,7 +97,6 @@ public class ProductDAO {
 
     /**
      * Retrieves the total quantity of a specific item produced by a player.
-     *
      * @param playerID the player's ID
      * @param itemID   the item's ID
      * @return the total produced quantity of the item
@@ -127,7 +124,6 @@ public class ProductDAO {
 
     /**
      * Maps a result set row to a ProductLog object.
-     *
      * @param rs the ResultSet to map
      * @return a ProductLog object
      * @throws SQLException if a database access error occurs
