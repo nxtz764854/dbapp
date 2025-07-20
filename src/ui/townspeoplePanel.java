@@ -23,6 +23,9 @@ public class townspeoplePanel extends JPanel {
         });
 
         JButton viewRelationshipsButton = new JButton("View Relationships");
+        viewRelationshipsButton.addActionListener(e -> {
+            new viewRelationshipsDialog(parentFrame, playerID);
+        });
 
         buttonPanel.add(giftButton);
         buttonPanel.add(viewRelationshipsButton);
