@@ -168,9 +168,6 @@ public class DBGui extends JFrame{
             });
             
             nextDayButton.addActionListener(e -> {
-                JPanel nextDayPanel = new NextDayPanel(DBGui.this);
-                cardPanel.add(nextDayPanel, "NEXTDAY");
-                cardLayout.show(cardPanel, "NEXTDAY");
                 gameService.advanceDay(playerID);
                 JOptionPane.showMessageDialog(this, "Sleeping...");
             });
