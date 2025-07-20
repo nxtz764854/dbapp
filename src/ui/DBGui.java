@@ -168,10 +168,24 @@ public class DBGui extends JFrame{
                 }
             });
             
-            shopButton.addActionListener(e -> {
-                JPanel shopPanel = new ShopPanel(DBGui.this);
-                cardPanel.add(shopPanel, "SHOP");
-                cardLayout.show(cardPanel, "SHOP");
+             shopButton.addActionListener(e -> {
+                String[] options = {"Buy/Sell Item", "View Transactions"};
+                int choice = JOptionPane.showOptionDialog(
+                        null,
+                        "Choose an action:",
+                        "Shop Options",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        options,
+                        options[0]
+                );
+
+                if (choice == 0) {
+                    new ShopDialog(DBGui.this, playerID);
+                } else if (choice == 1) {
+                    new TransactionHistoryDialog(DBGui.this, playerID);
+                }
             });
             
            inventoryButton.addActionListener(e -> {
