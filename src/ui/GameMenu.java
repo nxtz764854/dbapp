@@ -5,29 +5,24 @@ import service.*;
 import util.DBConnection;
 
 import java.util.Scanner;
-import java.util.List;
 
 public class GameMenu {
     private Scanner scanner;
     private GameService gameService;
-    private PlayerService playerService;
     private CropService cropService;
     private ItemService itemService;
     private AnimalService animalService;
     private InventoryService inventoryService;
     private NPCService npcService;
-    private RelationService relationService;
 
     public GameMenu(DBConnection conn) {
         this.scanner = new Scanner(System.in);
         this.gameService = new GameService();
-        this.playerService = new PlayerService();
         this.cropService = new CropService();
         this.itemService = new ItemService();
         this.animalService = new AnimalService();
         this.inventoryService = new InventoryService();
         this.npcService = new NPCService();
-        this.relationService = new RelationService();
     }
 
     public void startGameLoop(int playerID) {
@@ -74,9 +69,9 @@ public class GameMenu {
 
     private void viewFarm(int playerID) {
         System.out.println("\n--- Crops ---");
-        for (Crop crop : cropService.getCropsByPlayerID(playerID)) {
+        for (Crop crop : cropService.getAllCropsByPlayer(playerID)) {
             System.out.printf("ID: %d | Name: %s | Days Left: %d | Ready: %b\n",
-                    crop.getCropID(), crop.getCropname(), crop.getGrowth_time(), crop.isReadytoharvest());
+                    crop.getCropID(), crop.getCropname(), crop.getGrowthTime(), crop.isReadyToHarvest());
         }
 
         System.out.println("\n--- Animals ---");
