@@ -8,8 +8,8 @@ import java.util.List;
 public class PlayerService {
     private PlayerDAO playerDAO;
 
-    public PlayerService(PlayerDAO playerDAO) {
-        this.playerDAO = playerDAO;
+    public PlayerService() {
+        this.playerDAO = new PlayerDAO();
     }
 
     public boolean createPlayer(Player player) {

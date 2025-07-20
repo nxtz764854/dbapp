@@ -8,8 +8,8 @@ import java.util.List;
 public class ItemService {
     private ItemsDAO itemsDAO;
 
-    public ItemService(ItemsDAO itemsDAO) {
-        this.itemsDAO = itemsDAO;
+    public ItemService() {
+        this.itemsDAO = new ItemsDAO();
     }
 
     /**

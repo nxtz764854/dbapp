@@ -8,8 +8,8 @@ import java.util.List;
 public class InventoryService {
     private InventoryDAO inventoryDAO;
 
-    public InventoryService(InventoryDAO inventoryDAO) {
-        this.inventoryDAO = inventoryDAO;
+    public InventoryService() {
+        this.inventoryDAO = new InventoryDAO();
     }
 
     public List<Inventory> getInventoryByPlayerID(int playerID) {

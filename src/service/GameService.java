@@ -1,7 +1,6 @@
 package service;
 
 import model.*;
-import service.*;
 
 public class GameService {
     private PlayerService playerService;
@@ -12,15 +11,13 @@ public class GameService {
     private NPCService npcService;
 
 
-    public GameService(PlayerService playerService, RelationService relationService,
-                       AnimalService animalService, CropService cropService,
-                       InventoryService inventoryService, NPCService npcService) {
-        this.playerService = playerService;
-        this.relationService = relationService;
-        this.animalService = animalService;
-        this.cropService = cropService;
-        this.inventoryService = inventoryService;
-        this.npcService = npcService;
+    public GameService() {
+        this.playerService = new PlayerService();
+        this.relationService = new RelationService();
+        this.animalService = new AnimalService();
+        this.cropService = new CropService();
+        this.inventoryService = new InventoryService();
+        this.npcService = new NPCService();
     }
 
     public void advanceDay(int playerID) {

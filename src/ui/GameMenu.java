@@ -2,6 +2,7 @@ package ui;
 
 import model.*;
 import service.*;
+import util.DBConnection;
 
 import java.util.Scanner;
 import java.util.List;
@@ -17,25 +18,16 @@ public class GameMenu {
     private NPCService npcService;
     private RelationService relationService;
 
-    public GameMenu(
-        GameService gameService,
-        PlayerService playerService,
-        CropService cropService,
-        ItemService itemService,
-        AnimalService animalService,
-        InventoryService inventoryService,
-        NPCService npcService,
-        RelationService relationService
-    ) {
+    public GameMenu(DBConnection conn) {
         this.scanner = new Scanner(System.in);
-        this.gameService = gameService;
-        this.playerService = playerService;
-        this.cropService = cropService;
-        this.itemService = itemService;
-        this.animalService = animalService;
-        this.inventoryService = inventoryService;
-        this.npcService = npcService;
-        this.relationService = relationService;
+        this.gameService = new GameService();
+        this.playerService = new PlayerService();
+        this.cropService = new CropService();
+        this.itemService = new ItemService();
+        this.animalService = new AnimalService();
+        this.inventoryService = new InventoryService();
+        this.npcService = new NPCService();
+        this.relationService = new RelationService();
     }
 
     public void startGameLoop(int playerID) {
