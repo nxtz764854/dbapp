@@ -1,21 +1,7 @@
 package ui;
 
-import model.Player;
-import model.Animal;
-import model.Crop;
-import model.Item;
-import model.Inventory;
-import model.NPC;
-import model.Relation;
-
-import service.PlayerService;
-import service.AnimalService;
-import service.CropService;
-import service.ItemService;
-import service.InventoryService;
-import service.NPCService;
-import service.RelationService;
-import service.GameService;
+import model.*;
+import service.*;
 
 import java.util.Scanner;
 import java.util.List;
@@ -125,11 +111,6 @@ public class GameMenu {
             return;
         }
 
-        if (npc.isGivinggifttoday()) {
-            System.out.println(npc.getNpcname() + " has already received a gift today.");
-            return;
-        }
-
         System.out.print("Enter item name to gift: ");
         String itemname = scanner.nextLine();
         Item item = itemService.getItemByName(itemname);
@@ -138,24 +119,22 @@ public class GameMenu {
             return;
         }
 
-        boolean removed = inventoryService.removeItemFromInventory(playerID, item.getItemID(), 1);
-        if (!removed) {
-            System.out.println("You don’t have that item.");
-            return;
+        boolean success = gameService.giveGift(playerID, npc.getNpcID(), item.getItemID());
+
+        if (success) {
+            System.out.println("You gifted " + itemname + " to " + npcname + ". They seem happy!");
+        } else {
+            System.out.println(npcname + " has already received a gift today or you don't have the item.");
         }
-
-        relationService.incrementHearts(playerID, npc.getNpcID());
-        npcService.updateGivingGiftToday(npc.getNpcID(), true);
-
-        System.out.println("You gifted " + itemname + " to " + npcname + ". They seem happy!");
     }
+
 
     private void harvest(int playerID) {
         System.out.println("\nHarvesting crops...");
-        cropService.markCropsHarvested(playerID); // Assumes this harvests and gives produce
+        gameService.harvestCrops(playerID);
 
         System.out.println("Harvesting animals...");
-        animalService.markAnimalsHarvested(playerID); // Assumes this resets ready flag and adds produce
+        gameService.harvestAnimals(playerID);
 
         System.out.println("All harvests completed!");
     }

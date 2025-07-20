@@ -105,6 +105,33 @@ public class NPCDAO {
         return npcs;
     }
 
+    public void updateGivingGiftToday(int npcID, boolean flag) {
+        String query = "UPDATE npcs SET givinggifttoday = ? WHERE npc_id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setBoolean(1, flag);
+            stmt.setInt(2, npcID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public boolean resetAllGiftFlags() {
+        String sql = "UPDATE npc SET givinggifttoday = false";
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
     public boolean setGiftFlag(int npcID, boolean flag) {
         String sql = "UPDATE npcs SET givinggifttoday = ? WHERE npcID = ?";
         try (Connection conn = DBConnection.getConnection();

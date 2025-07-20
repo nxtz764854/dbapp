@@ -42,6 +42,15 @@ public class NPCService {
         return npcs != null ? npcs : new ArrayList<>();
     }
 
+    public void updateGivingGiftToday(int npcID, boolean flag) {
+        npcDAO.updateGivingGiftToday(npcID, flag);
+    }
+
+    public void resetAllGiftFlags() {
+        npcDAO.resetAllGiftFlags();
+    }
+
+
     public boolean setGiftFlag(int npcID, boolean flag) {
         return npcDAO.setGiftFlag(npcID, flag);
     }

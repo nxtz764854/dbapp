@@ -3,23 +3,24 @@ package service;
 import model.*;
 import service.*;
 
-import java.util.List;
-
 public class GameService {
     private PlayerService playerService;
     private RelationService relationService;
     private AnimalService animalService;
     private CropService cropService;
     private InventoryService inventoryService;
+    private NPCService npcService;
+
 
     public GameService(PlayerService playerService, RelationService relationService,
                        AnimalService animalService, CropService cropService,
-                       InventoryService inventoryService) {
+                       InventoryService inventoryService, NPCService npcService) {
         this.playerService = playerService;
         this.relationService = relationService;
         this.animalService = animalService;
         this.cropService = cropService;
         this.inventoryService = inventoryService;
+        this.npcService = npcService;
     }
 
     public void advanceDay(int playerID) {
@@ -46,17 +47,18 @@ public class GameService {
 
         animalService.resetReadyToHarvest(playerID);
         cropService.advanceGrowthForPlayer(playerID);
+        npcService.resetAllGiftFlags();
     }
 
-private String getNextSeason(String currentSeason) {
-    return switch (currentSeason) {
-        case "Spring" -> "Summer";
-        case "Summer" -> "Fall";
-        case "Fall" -> "Winter";
-        case "Winter" -> "Spring";
-        default -> "Spring"; // fallback for unrecognized values
-    };
-}
+    private String getNextSeason(String currentSeason) {
+        return switch (currentSeason) {
+            case "Spring" -> "Summer";
+            case "Summer" -> "Fall";
+            case "Fall" -> "Winter";
+            case "Winter" -> "Spring";
+            default -> "Spring"; // fallback for unrecognized values
+        };
+    }
 
     // Gift giving logic
     public boolean giveGift(int playerID, int npcID, int itemID) {
@@ -87,3 +89,4 @@ private String getNextSeason(String currentSeason) {
         });
     }
 }
+
