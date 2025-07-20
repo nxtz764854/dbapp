@@ -130,7 +130,7 @@ public class DBGui extends JFrame{
             }
             
              npcButton.addActionListener(e -> {
-                JPanel townspeoplePanel = new townspeoplePanel(DBGui.this);
+                JPanel townspeoplePanel = new townspeoplePanel(DBGui.this, conn);
                 cardPanel.add(townspeoplePanel, "Townspeople");
                 cardLayout.show(cardPanel, "Townspeople");
             });
