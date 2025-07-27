@@ -67,4 +67,9 @@ public class Item {
         this.buyable = buyable; 
     }
 
+    @Override
+    public String toString() {
+        return itemname + ": " + price;
+    }
+
 }

@@ -11,7 +11,7 @@ public class townspeoplePanel extends JPanel {
         title.setFont(new Font("Arial", Font.BOLD, 18));
 
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(2, 1, 10, 10));
+        buttonPanel.setLayout(new GridLayout(3, 1, 10, 10));
 
         JButton giftButton = new JButton("Give a Gift");
         giftButton.addActionListener(e -> {
@@ -27,8 +27,16 @@ public class townspeoplePanel extends JPanel {
             new viewRelationshipsDialog(parent, playerID);
         });
 
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(e -> {
+            if (parent instanceof ui.DBGui gui) {
+                gui.showMainMenu();
+            }
+        });
+
         buttonPanel.add(giftButton);
         buttonPanel.add(viewRelationshipsButton);
+        buttonPanel.add(backButton);
 
         add(title, BorderLayout.NORTH);
         add(buttonPanel, BorderLayout.CENTER);

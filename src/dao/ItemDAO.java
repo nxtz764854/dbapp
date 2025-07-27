@@ -16,7 +16,7 @@ public class ItemDAO {
      */
     public boolean addItem(Item item) {
         // SQL statement to insert an item into the database
-        String sql = "INSERT INTO items (itemname, itemtype, descript, price, buyable) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO items (itemname, itemtype, descript, itemprice, buyable) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -43,7 +43,7 @@ public class ItemDAO {
      */
     public boolean updateItem(Item item) {
         // SQL statement to update an item in the database
-        String sql = "UPDATE items SET itemname = ?, itemtype = ?, descript = ?, price = ?, buyable = ? WHERE itemID = ?";
+        String sql = "UPDATE items SET itemname = ?, itemtype = ?, descript = ?, itemprice = ?, buyable = ? WHERE itemID = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -230,7 +230,7 @@ public class ItemDAO {
         item.setItemname(rs.getString("itemname"));
         item.setItemtype(rs.getString("itemtype"));
         item.setDescript(rs.getString("descript"));
-        item.setPrice(rs.getInt("price"));
+        item.setPrice(rs.getInt("itemprice"));
         item.setBuyable(rs.getBoolean("buyable"));
         return item;
     }

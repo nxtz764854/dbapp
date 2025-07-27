@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS items (
     itemtype ENUM('crop', 'animal', 'tool', 'gift', 'product') NOT NULL,        -- Item Type                                        
     descript VARCHAR(255),                                                       -- Description of the item
     itemprice INT DEFAULT 0,                                                     -- Price of the item
-    buyable BOOLEAN                                                             -- Flag indicating if the item is buyable
+    buyable BOOLEAN DEFAULT FALSE                                                -- Flag indicating if the item is buyable
 );
 
 -- INVENTORY TABLE
@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS product_logs (
 
 -- TRANSACTION TABLE
 CREATE TABLE IF NOT EXISTS transactions (
-    transactionID INT AUTO_INCREMENT PRIMARY KEY,           -- Unique transaction ID
+    transactionID INT AUTO_INCREMENT PRIMARY KEY,           -- Unique transaction IDplayers
     playerID INT,                                           -- The player who made the transaction
     transaction_type ENUM('buy', 'sell') NOT NULL,          -- Type of transaction (buy or sell)
     itemID INT,                                             -- The item that was bought or sold
@@ -166,31 +166,38 @@ CREATE TABLE IF NOT EXISTS transactions (
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,           -- Timestamp when the transaction was made
 
     FOREIGN KEY (playerID) REFERENCES players(playerID) ON DELETE CASCADE,
-    FOREIGN KEY (itemID) REFERENCES items(itemID),
+    FOREIGN KEY (itemID) REFERENCES items(itemID)
 );
 
-INSERT INTO items (itemID, itemname, itemtype, descript)
-VALUES
-(1, 'Turnip Seed', 'crop', 1, 'A fast-growing root vegetable. Grows in 1 day.'),
-(2, 'Carrot Seed', 'crop', 2, 'A crunchy orange vegetable. Grows in 2 days.'),
-(3, 'Potato Seed', 'crop', 5, 'A starchy tuber. Grows in 3 days.'),
-(4, 'Tomato Seed', 'crop', 8, 'A juicy red fruit. Grows in 2 days.'),
-(5, 'Pumpkin Seed', 'crop', 16, 'A large orange squash. Grows in 5 days.'),
+INSERT INTO items (itemname, itemtype, descript, itemprice, buyable) VALUES
+-- Crops
+('Turnip Seeds', 'crop', 'Basic spring crop. Fast-growing.', 20, TRUE),
+('Carrot Seeds', 'crop', 'Crunchy and nutritious crop.', 25, TRUE),
+('Tomato Seeds', 'crop', 'Juicy red tomatoes. Great in salads.', 35, TRUE),
 
-(6, 'Turnip', 'product', 30, 'A fast-growing root vegetable. Grows in 1 day.'),
-(7, 'Carrot', 'product', 60, 'A crunchy orange vegetable. Grows in 2 days.'),
-(8, 'Potato', 'product', 100, 'A starchy tuber. Grows in 3 days.'),
-(9, 'Tomato', 'product', 60, 'A juicy red fruit. Grows in 2 days.'),
-(10,'Pumpkin', 'product', 220, 'A large orange squash. Grows in 5 days.'),
+-- Animals
+('Chicken', 'animal', 'Produces eggs every few days.', 500, TRUE),
+('Cow', 'animal', 'Produces milk every few days.', 1000, TRUE),
 
-(11, 'Chicken', 'animal', 3, 'A chicken that lays eggs. Ready after 3 days.'),
-(12, 'Cow', 'animal', 5, 'A cow that makes milk. Ready in 5 days.'),
-(13, 'Pig', 'animal', 8, 'A Pig that grows truffles. Ready in 8 days.'),
-(14, 'Sheep', 'animal', 10, 'A Sheep with shaveable wool. Ready in 10 days.'),
-(15, 'Bee', 'animal', 15, 'A honey-making bee. Ready in 15 days.'),
+-- Tools
+('Hoe', 'tool', 'Used for tilling soil.', 0, FALSE),
+('Watering Can', 'tool', 'Used for watering crops.', 0, FALSE),
 
-(16, 'Egg', 'product', 30, 'A nice egg.'),
-(17, 'Milk', 'product', 50, 'Moo moo milkers'),
-(18, 'Truffle', 'product', 100, 'Did you know pigs can produce truffles?'),
-(19, 'Wool', 'product', 200, 'Yes sir, yes sir, three bags full!.', 0),
-(20,'Honey', 'product', 500, 'Yes darling?');
+-- Gifts
+('Flower Bouquet', 'gift', 'A lovely bouquet. Brightens anyone’s day.', 80, TRUE),
+('Book of Poems', 'gift', 'Touching verses. Appreciated by artistic NPCs.', 100, TRUE),
+
+-- Products
+('Egg', 'product', 'Laid by chickens.', 60, FALSE),
+('Milk', 'product', 'Produced by cows.', 120, FALSE),
+('Turnip', 'product', 'Harvested turnip crop.', 40, FALSE),
+('Carrot', 'product', 'Harvested carrot crop.', 50, FALSE),
+('Tomato', 'product', 'Harvested tomato crop.', 70, FALSE);
+
+INSERT INTO npcs (npcname, givinggifttoday) VALUES
+('Dionysus', FALSE),
+('Mari', FALSE),
+('Ena', FALSE),
+('Tommy', FALSE),
+('Farmer Joe', FALSE);
+

@@ -15,7 +15,7 @@ public class InventoryDAO {
      */
     public List<Inventory> getInventoryByPlayerID(int playerID) {
         List<Inventory> list = new ArrayList<>();
-        String sql = "SELECT * FROM inventory WHERE playerID = ?";
+        String sql = "SELECT * FROM inventories WHERE playerID = ?";
 
         try (Connection conn = DBConnection.getConnection(); 
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -41,9 +41,9 @@ public class InventoryDAO {
      * @return true if the addition was successful, false otherwise
      */
     public boolean addItemToInventory(int playerID, int itemID, int quantity) {
-        String check = "SELECT quantity FROM inventory WHERE playerID = ? AND itemID = ?";
-        String insert = "INSERT INTO inventory (playerID, itemID, quantity) VALUES (?, ?, ?)";
-        String update = "UPDATE inventory SET quantity = quantity + ? WHERE playerID = ? AND itemID = ?";
+        String check = "SELECT quantity FROM inventories WHERE playerID = ? AND itemID = ?";
+        String insert = "INSERT INTO inventories (playerID, itemID, quantity) VALUES (?, ?, ?)";
+        String update = "UPDATE inventories SET quantity = quantity + ? WHERE playerID = ? AND itemID = ?";
 
         try (Connection conn = DBConnection.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(check);
@@ -81,9 +81,9 @@ public class InventoryDAO {
      * @return true if the removal was successful, false otherwise
      */
     public boolean removeItemFromInventory(int playerID, int itemID, int quantity) {
-        String check = "SELECT quantity FROM inventory WHERE playerID = ? AND itemID = ?";
-        String delete = "DELETE FROM inventory WHERE playerID = ? AND itemID = ?";
-        String update = "UPDATE inventory SET quantity = quantity - ? WHERE playerID = ? AND itemID = ?";
+        String check = "SELECT quantity FROM inventories WHERE playerID = ? AND itemID = ?";
+        String delete = "DELETE FROM inventories WHERE playerID = ? AND itemID = ?";
+        String update = "UPDATE inventories SET quantity = quantity - ? WHERE playerID = ? AND itemID = ?";
 
         try (Connection conn = DBConnection.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(check);
