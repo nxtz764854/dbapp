@@ -3,6 +3,10 @@ package ui;
 import ui.CropCRUD;
 import ui.ItemCRUD;
 import ui.PlayerCRUD;
+import ui.InventoryCRUD;
+import ui.AnimalCRUD;
+import ui.NPCCRUD;
+import ui.RelationCRUD;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,6 +40,7 @@ public class CrudUI extends JPanel {
         JButton cropBtn = new JButton("Manage Crops");
         JButton animalBtn = new JButton("Manage Animals");
         JButton npcBtn = new JButton("Manage NPCs");
+        JButton relationBtn = new JButton("Manage Relationships");
         JButton backBtn = new JButton("Back");
 
         buttonPanel.add(playerBtn);
@@ -44,6 +49,7 @@ public class CrudUI extends JPanel {
         buttonPanel.add(cropBtn);
         buttonPanel.add(animalBtn);
         buttonPanel.add(npcBtn);
+        buttonPanel.add(relationBtn);
         buttonPanel.add(backBtn);
 
         JPanel menuWrapper = new JPanel(new BorderLayout());
@@ -64,6 +70,7 @@ public class CrudUI extends JPanel {
         cropBtn.addActionListener(e -> cardLayout.show(cardPanel, "Crop"));
         animalBtn.addActionListener(e -> cardLayout.show(cardPanel, "Animal"));
         npcBtn.addActionListener(e -> new NPCCRUD(parent));
+        relationBtn.addActionListener(e -> new RelationCRUD(parent).setVisible(true));
     }
 
     public void showMainMenu() {

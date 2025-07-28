@@ -270,36 +270,30 @@ public class DBGui extends JFrame {
                     backButton.addActionListener(evt -> cardLayout.show(cardPanel, "MainMenu"));
 
                     giftReportButton.addActionListener(evt -> {
-                        JTextField npcIDField = new JTextField();
-                        JTextField yearField = new JTextField();
-                        JTextField weekField = new JTextField();
+                        List<GiftLog> logs = giftLogService.getGiftLogsByPlayer(playerID);
 
-                        JPanel inputPanel = new JPanel(new GridLayout(3, 2));
-                        inputPanel.add(new JLabel("NPC ID:"));
-                        inputPanel.add(npcIDField);
-                        inputPanel.add(new JLabel("Year:"));
-                        inputPanel.add(yearField);
-                        inputPanel.add(new JLabel("Week Number:"));
-                        inputPanel.add(weekField);
+                        StringBuilder sb = new StringBuilder("Complete Gift History:\n\n");
 
-                        int result = JOptionPane.showConfirmDialog(null, inputPanel, "Enter Gift Report Details", JOptionPane.OK_CANCEL_OPTION);
-                        if (result == JOptionPane.OK_OPTION) {
-                            int npcID = Integer.parseInt(npcIDField.getText());
-                            int year = Integer.parseInt(yearField.getText());
-                            int week = Integer.parseInt(weekField.getText());
-                            List<GiftLog> logs = giftLogService.getGiftLogsForWeek(playerID, npcID, year, week);
+                        for (GiftLog log : logs) {
+                            Item item = itemService.getItemByID(log.getItemID());
+                            String itemName = item != null ? item.getItemname() : "Unknown";
 
-                            StringBuilder sb = new StringBuilder("Gift Logs:\n");
-                            for (GiftLog log : logs) {
-                                Item item = itemService.getItemByID(log.getItemID());
-                                String itemName = item != null ? item.getItemname() : "Unknown";
-                                sb.append("NPC ID: ").append(log.getNpcID())
-                                  .append(", Item: ").append(itemName)
-                                  .append(", Date: ").append(log.getDateGiven()).append("\n");
-                            }
-                            showReport(sb.toString(), "Gift Report");
+                            NPC npc = npcService.getNPCByID(log.getNpcID());
+                            String npcName = npc != null ? npc.getNpcname() : "Unknown";
+
+                            sb.append("Date: ").append(log.getSeason()).append(" ")
+                            .append(log.getDay()).append(", Year ").append(log.getYear()).append("\n")
+                            .append("To: ").append(npcName).append("\n")
+                            .append("Item: ").append(itemName).append("\n\n");
                         }
+
+                        if (logs.isEmpty()) {
+                            sb.append("No gift logs found.");
+                        }
+
+                        showReport(sb.toString(), "Gift Report");
                     });
+
 
                     harvestReportButton.addActionListener(evt -> {
                         JComboBox<String> seasonBox = new JComboBox<>(new String[]{"Spring", "Summer", "Fall", "Winter"});
