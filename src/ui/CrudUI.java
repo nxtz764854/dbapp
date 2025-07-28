@@ -36,8 +36,7 @@ public class CrudUI extends JPanel {
 
         backBtn.addActionListener(e -> parent.showMainMenu());
 
-        // Example: Add placeholder dialogs for now
-        playerBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Manage Players - To Be Implemented"));
+        playerBtn.addActionListener(e -> new PlayerCRUD(parent));
         itemBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Manage Items - To Be Implemented"));
         cropBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Manage Crops - To Be Implemented"));
         animalBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Manage Animals - To Be Implemented"));
