@@ -113,66 +113,6 @@ public class GiftDAO {
         return null;
     }
 
-    /**
-     * Counts the number of gifts given to an NPC by a player in a given week.
-     * @param playerID the player ID
-     * @param npcID the NPC ID
-     * @param year the year
-     * @param weekNumber the week number
-     * @return the number of gifts given
-     */
-    public int countGiftsGivenThisWeek(int playerID, int npcID, int year, int weekNumber) {
-        // Count the number of gifts given to an NPC by a player in a given week
-        String sql = "SELECT COUNT(*) FROM gift_logs WHERE playerID = ? AND npcID = ? AND YEAR(timestamp) = ? AND WEEK(timestamp, 1) = ?";
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, playerID);
-            stmt.setInt(2, npcID);
-            stmt.setInt(3, year);
-            stmt.setInt(4, weekNumber);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return 0;
-    }
-
-    /**
-     * Retrieves all gift logs for a player and specific NPC in a given week.
-     * @param playerID the player ID
-     * @param npcID the NPC ID
-     * @param year the year
-     * @param weekNumber the week number
-     * @return a list of GiftLogs for the player and NPC
-     */
-    public List<GiftLog> getGiftLogsForWeek(int playerID, int npcID, int year, int weekNumber) {
-        // Retrieve all gift logs for a player and specific NPC in a given week
-        List<GiftLog> logs = new ArrayList<>();
-        String sql = "SELECT * FROM gift_logs WHERE playerID = ? AND npcID = ? AND YEAR(timestamp) = ? AND WEEK(timestamp, 1) = ? ORDER BY timestamp DESC";
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, playerID);
-            stmt.setInt(2, npcID);
-            stmt.setInt(3, year);
-            stmt.setInt(4, weekNumber);
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                logs.add(mapResultSetToGiftLog(rs));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return logs;
-    }
 
     public List<GiftLog> getGiftLogsDetailedByPlayer(int playerID) {
         List<GiftLog> logs = new ArrayList<>();

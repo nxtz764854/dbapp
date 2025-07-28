@@ -32,6 +32,7 @@ public class CrudUI extends JPanel {
         JPanel buttonPanel = new JPanel(new GridLayout(6, 1, 10, 10));
         JButton playerBtn = new JButton("Manage Players");
         JButton itemBtn = new JButton("Manage Items");
+        JButton invBtn = new JButton("Manage Inventories");
         JButton cropBtn = new JButton("Manage Crops");
         JButton animalBtn = new JButton("Manage Animals");
         JButton npcBtn = new JButton("Manage NPCs");
@@ -39,6 +40,7 @@ public class CrudUI extends JPanel {
 
         buttonPanel.add(playerBtn);
         buttonPanel.add(itemBtn);
+        buttonPanel.add(invBtn);
         buttonPanel.add(cropBtn);
         buttonPanel.add(animalBtn);
         buttonPanel.add(npcBtn);
@@ -58,10 +60,10 @@ public class CrudUI extends JPanel {
 
         playerBtn.addActionListener(e -> new PlayerCRUD(parent));
         itemBtn.addActionListener(e -> new ItemCRUD(parent));
+        invBtn.addActionListener(e -> new InventoryCRUD(parent));
+        cropBtn.addActionListener(e -> cardLayout.show(cardPanel, "Crop"));
         animalBtn.addActionListener(e -> cardLayout.show(cardPanel, "Animal"));
         npcBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Manage NPCs - To Be Implemented"));
-
-        cropBtn.addActionListener(e -> cardLayout.show(cardPanel, "Crop"));
     }
 
     public void showMainMenu() {

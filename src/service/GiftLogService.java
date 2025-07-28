@@ -28,16 +28,6 @@ public class GiftLogService {
         return giftDAO.getLatestGiftLog(playerID, npcID);
     }
 
-    // Count the number of gifts given to this NPC this week
-    public int countGiftsGivenThisWeek(int playerID, int npcID, int year, int weekNumber) {
-        return giftDAO.countGiftsGivenThisWeek(playerID, npcID, year, weekNumber);
-    }
-
-    // Get all gift logs for a player and specific NPC in the given week
-    public List<GiftLog> getGiftLogsForWeek(int playerID, int npcID, int year, int weekNumber) {
-        return giftDAO.getGiftLogsForWeek(playerID, npcID, year, weekNumber);
-    }
-
     public List<GiftLog> getDetailedGiftLogs(int playerID) {
         return giftDAO.getGiftLogsDetailedByPlayer(playerID);
     }

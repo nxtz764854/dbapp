@@ -16,7 +16,7 @@ public class townspeoplePanel extends JPanel {
         JButton giftButton = new JButton("Give a Gift");
         giftButton.addActionListener(e -> {
             try {
-                new GiftDialog(parent, conn).setVisible(true);
+                new GiftDialog(parent, conn, playerID).setVisible(true);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
