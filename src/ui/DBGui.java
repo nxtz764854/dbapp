@@ -30,6 +30,8 @@ public class DBGui extends JFrame {
     private int playerID;
     private boolean reportPanelAdded = false;
 
+    private JLabel playerInfoLabel;
+
     public DBGui(Connection conn) {
         this.conn = conn;
         UI();
@@ -88,6 +90,16 @@ public class DBGui extends JFrame {
             manageButton.setFocusPainted(false);
             manageButton.setFont(new Font("SansSerif", Font.BOLD, 14));
 
+           
+
+            playerInfoLabel = new JLabel("", SwingConstants.CENTER);
+            playerInfoLabel.setForeground(Color.WHITE);
+            playerInfoLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+            playerInfoLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // center it like buttons
+            playerInfoLabel.setVisible(false); // hidden until player logs in
+
+            centerPanel.add(playerInfoLabel);
+
             JButton npcButton = new JButton("Townspeople");
             JButton farmButton = new JButton("Farm");
             JButton shopButton = new JButton("Shop");
@@ -138,6 +150,9 @@ public class DBGui extends JFrame {
                     }
 
                 }
+
+                updatePlayerInfoDisplay();
+                playerInfoLabel.setVisible(true);
             });
 
             centerPanel.add(nameLabel);
@@ -228,6 +243,8 @@ public class DBGui extends JFrame {
             nextDayButton.addActionListener(e -> {
                 gameService.advanceDay(playerID);
                 JOptionPane.showMessageDialog(this, "Sleeping...");
+
+                updatePlayerInfoDisplay();
             });
 
              reportsButton.addActionListener(e -> {
@@ -253,48 +270,36 @@ public class DBGui extends JFrame {
                     backButton.addActionListener(evt -> cardLayout.show(cardPanel, "MainMenu"));
 
                     giftReportButton.addActionListener(evt -> {
-                        // Step 1: Populate dropdown of NPC names
-                        List<NPC> allNPCs = npcService.getAllNPCs();
-                        JComboBox<String> npcDropdown = new JComboBox<>();
-                        for (NPC npc : allNPCs) {
-                            npcDropdown.addItem(npc.getNpcname());
-                        }
+                        JTextField npcIDField = new JTextField();
+                        JTextField yearField = new JTextField();
+                        JTextField weekField = new JTextField();
 
-                        // Step 2: Show input dialog
-                        JPanel inputPanel = new JPanel(new GridLayout(1, 2));
-                        inputPanel.add(new JLabel("NPC Name:"));
-                        inputPanel.add(npcDropdown);
+                        JPanel inputPanel = new JPanel(new GridLayout(3, 2));
+                        inputPanel.add(new JLabel("NPC ID:"));
+                        inputPanel.add(npcIDField);
+                        inputPanel.add(new JLabel("Year:"));
+                        inputPanel.add(yearField);
+                        inputPanel.add(new JLabel("Week Number:"));
+                        inputPanel.add(weekField);
 
-                        int result = JOptionPane.showConfirmDialog(null, inputPanel, "Select Townsperson", JOptionPane.OK_CANCEL_OPTION);
+                        int result = JOptionPane.showConfirmDialog(null, inputPanel, "Enter Gift Report Details", JOptionPane.OK_CANCEL_OPTION);
                         if (result == JOptionPane.OK_OPTION) {
-                            String npcName = (String) npcDropdown.getSelectedItem();
-                            NPC selectedNPC = npcService.getNPCByName(npcName);
+                            int npcID = Integer.parseInt(npcIDField.getText());
+                            int year = Integer.parseInt(yearField.getText());
+                            int week = Integer.parseInt(weekField.getText());
+                            List<GiftLog> logs = giftLogService.getGiftLogsForWeek(playerID, npcID, year, week);
 
-                            if (selectedNPC == null) {
-                                JOptionPane.showMessageDialog(null, "NPC not found.");
-                                return;
-                            }
-
-                            int npcID = selectedNPC.getNpcID();
-                            List<GiftLog> logs = giftLogService.getGiftLogsByPlayerAndNPC(playerID, npcID);
-
-                            StringBuilder sb = new StringBuilder("Gift Logs for " + npcName + ":\n");
+                            StringBuilder sb = new StringBuilder("Gift Logs:\n");
                             for (GiftLog log : logs) {
                                 Item item = itemService.getItemByID(log.getItemID());
-                                String itemName = (item != null) ? item.getItemname() : "Unknown";
-                                sb.append("Item: ").append(itemName)
-                                .append(" — Date: ").append(log.getSeason()).append(" ")
-                                .append(log.getDay()).append(", Year ").append(log.getYear()).append("\n");
+                                String itemName = item != null ? item.getItemname() : "Unknown";
+                                sb.append("NPC ID: ").append(log.getNpcID())
+                                  .append(", Item: ").append(itemName)
+                                  .append(", Date: ").append(log.getDateGiven()).append("\n");
                             }
-
-                            if (logs.isEmpty()) {
-                                sb.append("No gifts given yet to ").append(npcName).append(".");
-                            }
-
-                            showReport(sb.toString(), "Gift Report for " + npcName);
+                            showReport(sb.toString(), "Gift Report");
                         }
                     });
-
 
                     harvestReportButton.addActionListener(evt -> {
                         JComboBox<String> seasonBox = new JComboBox<>(new String[]{"Spring", "Summer", "Fall", "Winter"});
@@ -400,4 +405,16 @@ public class DBGui extends JFrame {
     public void showMainMenu() {
         cardLayout.show(cardPanel, "MainMenu");
     }
+
+    private void updatePlayerInfoDisplay() {
+    Player player = playerService.getPlayerByID(playerID);
+    if (player != null) {
+        String info = String.format("Day %d | %s | Year %d | Wallet: %d gold",
+                player.getCurrent_day(),
+                player.getCurrent_season(),
+                player.getCurrent_year(),
+                player.getWallet());
+        playerInfoLabel.setText(info);
+    }
+}
 }
