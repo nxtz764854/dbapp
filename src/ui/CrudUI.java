@@ -63,7 +63,7 @@ public class CrudUI extends JPanel {
         invBtn.addActionListener(e -> new InventoryCRUD(parent));
         cropBtn.addActionListener(e -> cardLayout.show(cardPanel, "Crop"));
         animalBtn.addActionListener(e -> cardLayout.show(cardPanel, "Animal"));
-        npcBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Manage NPCs - To Be Implemented"));
+        npcBtn.addActionListener(e -> new NPCCRUD(parent));
     }
 
     public void showMainMenu() {
