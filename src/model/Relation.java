@@ -17,6 +17,12 @@ public class Relation {
         this.giftCountThisWeek = giftCountThisWeek;
     }
 
+    public Relation(int playerID, int npcID, int hearts) {
+        this.playerID = playerID;
+        this.npcID = npcID;
+        this.npchearts = hearts;
+    }
+
     public int getPlayerID() { 
         return playerID; 
     }

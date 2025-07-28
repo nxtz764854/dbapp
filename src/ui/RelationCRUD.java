@@ -8,41 +8,36 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
-public class RelationCRUD extends JDialog {
+public class RelationCRUD extends JFrame {
 
-    private JTextField playerIDField, npcIDField, heartsField, giftDayField, giftCountField;
+    private JTextField playerIDField, npcIDField, heartsField;
     private JTable relationTable;
     private DefaultTableModel tableModel;
     private RelationsDAO relationsDAO = new RelationsDAO();
 
     public RelationCRUD(JFrame parent) {
-        super(parent, "Relation Management", true);
-        setSize(800, 500);
+        setTitle("Relation Management");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(600, 400);
         setLocationRelativeTo(parent);
 
         initComponents();
         loadRelations();
+        setVisible(true);
     }
 
     private void initComponents() {
-        JPanel formPanel = new JPanel(new GridLayout(5, 2, 5, 5));
-
+        JPanel inputPanel = new JPanel(new GridLayout(3, 2));
         playerIDField = new JTextField();
         npcIDField = new JTextField();
         heartsField = new JTextField();
-        giftDayField = new JTextField();
-        giftCountField = new JTextField();
 
-        formPanel.add(new JLabel("Player ID:"));
-        formPanel.add(playerIDField);
-        formPanel.add(new JLabel("NPC ID:"));
-        formPanel.add(npcIDField);
-        formPanel.add(new JLabel("Hearts:"));
-        formPanel.add(heartsField);
-        formPanel.add(new JLabel("Last Gift Day:"));
-        formPanel.add(giftDayField);
-        formPanel.add(new JLabel("Gift Count This Week:"));
-        formPanel.add(giftCountField);
+        inputPanel.add(new JLabel("Player ID:"));
+        inputPanel.add(playerIDField);
+        inputPanel.add(new JLabel("NPC ID:"));
+        inputPanel.add(npcIDField);
+        inputPanel.add(new JLabel("Hearts:"));
+        inputPanel.add(heartsField);
 
         JButton addButton = new JButton("Add");
         JButton updateButton = new JButton("Update");
@@ -60,7 +55,7 @@ public class RelationCRUD extends JDialog {
         buttonPanel.add(deleteButton);
         buttonPanel.add(refreshButton);
 
-        tableModel = new DefaultTableModel(new Object[]{"Player ID", "NPC ID", "Hearts", "Last Gift Day", "Gift Count"}, 0) {
+        tableModel = new DefaultTableModel(new Object[]{"Player ID", "NPC ID", "Hearts"}, 0) {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
@@ -68,11 +63,10 @@ public class RelationCRUD extends JDialog {
 
         relationTable = new JTable(tableModel);
         relationTable.getSelectionModel().addListSelectionListener(e -> populateFields());
-
         JScrollPane scrollPane = new JScrollPane(relationTable);
 
-        setLayout(new BorderLayout(10, 10));
-        add(formPanel, BorderLayout.NORTH);
+        setLayout(new BorderLayout());
+        add(inputPanel, BorderLayout.NORTH);
         add(buttonPanel, BorderLayout.CENTER);
         add(scrollPane, BorderLayout.SOUTH);
     }
@@ -87,21 +81,17 @@ public class RelationCRUD extends JDialog {
             tableModel.addRow(new Object[]{
                     r.getPlayerID(),
                     r.getNpcID(),
-                    r.getNpchearts(),
-                    r.getLastGiftDay(),
-                    r.getGiftCountThisWeek()
+                    r.getNpchearts()
             });
         }
     }
 
     private void populateFields() {
-        int selectedRow = relationTable.getSelectedRow();
-        if (selectedRow >= 0) {
-            playerIDField.setText(String.valueOf(relationTable.getValueAt(selectedRow, 0)));
-            npcIDField.setText(String.valueOf(relationTable.getValueAt(selectedRow, 1)));
-            heartsField.setText(String.valueOf(relationTable.getValueAt(selectedRow, 2)));
-            giftDayField.setText(String.valueOf(relationTable.getValueAt(selectedRow, 3)));
-            giftCountField.setText(String.valueOf(relationTable.getValueAt(selectedRow, 4)));
+        int selected = relationTable.getSelectedRow();
+        if (selected >= 0) {
+            playerIDField.setText(String.valueOf(relationTable.getValueAt(selected, 0)));
+            npcIDField.setText(String.valueOf(relationTable.getValueAt(selected, 1)));
+            heartsField.setText(String.valueOf(relationTable.getValueAt(selected, 2)));
         }
     }
 
@@ -110,9 +100,7 @@ public class RelationCRUD extends JDialog {
             Relation r = new Relation(
                     Integer.parseInt(playerIDField.getText()),
                     Integer.parseInt(npcIDField.getText()),
-                    Integer.parseInt(heartsField.getText()),
-                    Integer.parseInt(giftDayField.getText()),
-                    Integer.parseInt(giftCountField.getText())
+                    Integer.parseInt(heartsField.getText())
             );
             if (relationsDAO.insertRelation(r)) {
                 loadRelations();
@@ -130,9 +118,7 @@ public class RelationCRUD extends JDialog {
             Relation r = new Relation(
                     Integer.parseInt(playerIDField.getText()),
                     Integer.parseInt(npcIDField.getText()),
-                    Integer.parseInt(heartsField.getText()),
-                    Integer.parseInt(giftDayField.getText()),
-                    Integer.parseInt(giftCountField.getText())
+                    Integer.parseInt(heartsField.getText())
             );
             if (relationsDAO.updateRelation(r)) {
                 loadRelations();
@@ -164,9 +150,6 @@ public class RelationCRUD extends JDialog {
         playerIDField.setText("");
         npcIDField.setText("");
         heartsField.setText("");
-        giftDayField.setText("");
-        giftCountField.setText("");
         relationTable.clearSelection();
     }
 }
-
