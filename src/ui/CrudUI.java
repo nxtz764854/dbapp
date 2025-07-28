@@ -37,7 +37,7 @@ public class CrudUI extends JPanel {
         backBtn.addActionListener(e -> parent.showMainMenu());
 
         playerBtn.addActionListener(e -> new PlayerCRUD(parent));
-        itemBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Manage Items - To Be Implemented"));
+        itemBtn.addActionListener(e -> new ItemCRUD(parent));
         cropBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Manage Crops - To Be Implemented"));
         animalBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Manage Animals - To Be Implemented"));
         npcBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Manage NPCs - To Be Implemented"));
