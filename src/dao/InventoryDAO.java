@@ -73,6 +73,38 @@ public class InventoryDAO {
         return false;
     }
 
+    public List<String[]> getDetailedInventory() {
+        List<String[]> data = new ArrayList<>();
+        String sql = """
+            SELECT p.playerID, p.playername, i.itemID, i.itemname, inv.quantity
+            FROM inventories inv
+            JOIN players p ON inv.playerID = p.playerID
+            JOIN items i ON inv.itemID = i.itemID
+            ORDER BY p.playerID, i.itemname
+        """;
+
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                data.add(new String[]{
+                    String.valueOf(rs.getInt("playerID")),
+                    rs.getString("playername"),
+                    String.valueOf(rs.getInt("itemID")),
+                    rs.getString("itemname"),
+                    String.valueOf(rs.getInt("quantity"))
+                });
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return data;
+    }
+
+
     /**
      * Removes a given item from a player's inventory.
      * @param playerID The ID of the player to remove the item from

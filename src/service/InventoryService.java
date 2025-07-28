@@ -26,4 +26,8 @@ public class InventoryService {
     public boolean removeItemFromInventory(int playerID, int itemID, int quantity) {
         return inventoryDAO.removeItemFromInventory(playerID, itemID, quantity);
     }
+
+    public List<String[]> getDetailedInventory() {
+        return inventoryDAO.getDetailedInventory();
+    }
 }
