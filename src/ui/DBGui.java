@@ -80,7 +80,7 @@ public class DBGui extends JFrame {
             JButton submitButton = new JButton("Submit");
             submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-            JButton manageButton = new JButton("Manage Data");
+            JButton manageButton = new JButton("Admin: Manage Data");
             manageButton.setAlignmentX(Component.CENTER_ALIGNMENT);
             manageButton.setMaximumSize(new Dimension(250, 30));
             manageButton.setBackground(new Color(89, 160, 221));
