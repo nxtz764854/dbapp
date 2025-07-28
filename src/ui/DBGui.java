@@ -80,6 +80,14 @@ public class DBGui extends JFrame {
             JButton submitButton = new JButton("Submit");
             submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+            JButton manageButton = new JButton("Manage Data");
+            manageButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            manageButton.setMaximumSize(new Dimension(250, 30));
+            manageButton.setBackground(new Color(89, 160, 221));
+            manageButton.setForeground(Color.WHITE);
+            manageButton.setFocusPainted(false);
+            manageButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+
             JButton npcButton = new JButton("Townspeople");
             JButton farmButton = new JButton("Farm");
             JButton shopButton = new JButton("Shop");
@@ -138,6 +146,14 @@ public class DBGui extends JFrame {
             centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
             centerPanel.add(submitButton);
             centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+            centerPanel.add(manageButton);
+            centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+
+            manageButton.addActionListener(e -> {
+                JPanel crudPanel = new CrudUI(DBGui.this, conn); // Assuming CrudUI extends JPanel
+                cardPanel.add(crudPanel, "CRUD");
+                cardLayout.show(cardPanel, "CRUD");
+            });
 
             for (JButton btn : gameButtons) {
                 centerPanel.add(btn);
